@@ -3,6 +3,7 @@ package org.buffer.agendaterapeutas.service;
 import org.buffer.agendaterapeutas.model.Session;
 import org.buffer.agendaterapeutas.repository.SessionRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class SessionService implements ISessionService {
@@ -20,4 +21,11 @@ public class SessionService implements ISessionService {
         }
         return sessionRepository.save(session);
     }
+
+    @Override
+    public List<Session> listAllSessions() {
+        return sessionRepository.findAll();
+    }
+
+
 }
