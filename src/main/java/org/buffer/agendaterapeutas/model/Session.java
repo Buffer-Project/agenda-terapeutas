@@ -76,4 +76,8 @@ public class Session {
     public void setEstado(SessionStatus estado) {
         this.estado = estado;
     }
+
+    public Long getPatientId() {
+        return null;
+    }
 }
