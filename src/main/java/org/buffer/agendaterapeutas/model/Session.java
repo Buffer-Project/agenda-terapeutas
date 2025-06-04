@@ -13,11 +13,11 @@ public class Session {
 
     @ManyToOne
     @JoinColumn(name = "id_terapeuta")
-    private Therapist terapeuta;
+    private Therapist therapist;
 
     @ManyToOne
     @JoinColumn(name = "id_paciente")
-    private Patient paciente;
+    private Patient patient;
 
     private LocalDateTime fechaHoraInicio;
     private LocalDateTime fechaHoraFin;
@@ -37,20 +37,20 @@ public class Session {
         this.idSession = idSesion;
     }
 
-    public User getTerapeuta() {
-        return terapeuta;
+    public User getTherapist() {
+        return therapist;
     }
 
-    public void setTerapeuta(Therapist terapeuta) {
-        this.terapeuta = terapeuta;
+    public void setTherapist(Therapist terapeuta) {
+        this.therapist = terapeuta;
     }
 
-    public User getPaciente() {
-        return paciente;
+    public User getPatient() {
+        return patient;
     }
 
-    public void setPaciente(Patient paciente) {
-        this.paciente = paciente;
+    public void setPatient(Patient paciente) {
+        this.patient = paciente;
     }
 
     public LocalDateTime getFechaHoraInicio() {

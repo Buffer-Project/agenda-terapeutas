@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TherapistService {
+public class TherapistService implements ITherapistService {
 
     private final TherapistRepository therapistRepository;
 

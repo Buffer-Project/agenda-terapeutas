@@ -5,6 +5,9 @@ import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.vo.TherapistVO;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/therapist")
 public class TherapistController {
@@ -34,4 +37,13 @@ public class TherapistController {
     public TherapistVO getTherapistById(@PathVariable Long therapistId) throws Exception {
         return new TherapistVO(therapistService.getTherapistById(therapistId));
     }
+
+    @GetMapping
+    public List<TherapistVO> getAllTherapists() {
+        return therapistService.getAllTherapists()
+                .stream()
+                .map(TherapistVO::new)
+                .collect(Collectors.toList());
+    }
+
 }
