@@ -3,10 +3,10 @@ package org.buffer.agendaterapeutas.vo;
 import org.buffer.agendaterapeutas.model.User;
 
 public class UserVO {
-    private Long id;
-    private String username;
-    private String name;
-    private String email;
+    private final Long id;
+    private final String username;
+    private final String name;
+    private final String email;
 
     public UserVO(User user) {
         this.id = user.getId();

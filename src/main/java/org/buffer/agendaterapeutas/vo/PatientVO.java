@@ -3,11 +3,11 @@ package org.buffer.agendaterapeutas.vo;
 import org.buffer.agendaterapeutas.model.Patient;
 
 public class PatientVO {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String healthInsurance;
+    private final Long id;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String healthInsurance;
 
 
     public PatientVO(Patient patient) {

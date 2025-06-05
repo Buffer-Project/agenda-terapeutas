@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TherapistVO {
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String username;
-    private String specialtyName;
-    private List<Long> sessionIds;
+    private final Long id;
+    private final String firstName;
+    private final String lastName;
+    private final String username;
+    private final String specialtyName;
+    private final List<Long> sessionIds;
 
     public TherapistVO(Therapist therapist) {
         this.id = therapist.getId();
