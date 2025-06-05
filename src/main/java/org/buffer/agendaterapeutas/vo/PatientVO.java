@@ -4,24 +4,33 @@ import org.buffer.agendaterapeutas.model.Patient;
 
 public class PatientVO {
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
+    private String healthInsurance;
+
 
     public PatientVO(Patient patient) {
         this.id = patient.getId();
-        this.name = patient.getName();
+        this.firstName = patient.getFirstName();
+        this.lastName = patient.getLastName();
         this.email = patient.getEmail();
+        this.healthInsurance = patient.getHealthInsurance();
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
+
+    public String getLastName() { return lastName; }
 
     public String getEmail() {
         return email;
     }
+
+    public String getHealthInsurance() { return healthInsurance; }
 }

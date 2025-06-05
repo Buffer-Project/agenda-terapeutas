@@ -25,4 +25,6 @@ public class UserService implements IUserService {
     public User getUserById(Long id) throws Exception {
         return userRepository.findById(id).orElseThrow();
     }
+
+
 }

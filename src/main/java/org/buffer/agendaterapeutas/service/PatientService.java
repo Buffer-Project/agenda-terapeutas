@@ -15,6 +15,7 @@ public class PatientService implements IPatientService {
         this.patientRepository = patientRepository;
     }
 
+    /*create patient*/
     public Patient createPatient(Patient patient) throws Exception {
         if (patient.getId() != null && patientRepository.existsById(patient.getId())) {
             throw new Exception("Patient with id " + patient.getId() + " already exists");
@@ -22,6 +23,13 @@ public class PatientService implements IPatientService {
         return patientRepository.save(patient);
     }
 
+    /*read patient*/
+    public Patient getPatientById(Long id) throws Exception {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new Exception("Patient not found with id: " + id));
+    }
+
+    /*update patient*/
     public Patient updatePatient(Patient patient) throws Exception {
         Long id = patient.getId();
         if (id == null || !patientRepository.existsById(id)) {
@@ -30,6 +38,7 @@ public class PatientService implements IPatientService {
         return patientRepository.save(patient);
     }
 
+    /*delete patient (not permanently)*/
     public void deletePatientById(Long id) throws Exception {
         if (!patientRepository.existsById(id)) {
             throw new Exception("Patient not found with id: " + id);
@@ -37,12 +46,8 @@ public class PatientService implements IPatientService {
         patientRepository.deleteById(id);
     }
 
-    public Patient getPatientById(Long id) throws Exception {
-        return patientRepository.findById(id)
-                .orElseThrow(() -> new Exception("Patient not found with id: " + id));
-    }
-
+    /*list patients*/
     public List<Patient> getAllPatients() {
-        return patientRepository.findAll();
+        return patientRepository.findByDeletedFalse();
     }
 }

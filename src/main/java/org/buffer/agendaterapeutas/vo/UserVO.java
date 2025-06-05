@@ -11,7 +11,7 @@ public class UserVO {
     public UserVO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
-        this.name = user.getName();
+        this.name = user.getFirstName() + " " + user.getLastName();
         this.email = user.getEmail();
     }
 

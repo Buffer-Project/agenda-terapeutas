@@ -40,6 +40,6 @@ public class TherapistService implements ITherapistService {
     }
 
     public List<Therapist> getAllTherapists() {
-        return therapistRepository.findAll();
+        return therapistRepository.findByDeletedFalse();
     }
 }

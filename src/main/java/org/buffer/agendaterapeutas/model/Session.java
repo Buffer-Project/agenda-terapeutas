@@ -12,18 +12,18 @@ public class Session {
     private Long idSession;
 
     @ManyToOne
-    @JoinColumn(name = "id_terapeuta")
+    @JoinColumn(name = "id_therapist")
     private Therapist therapist;
 
     @ManyToOne
-    @JoinColumn(name = "id_paciente")
+    @JoinColumn(name = "id_patient")
     private Patient patient;
 
-    private LocalDateTime fechaHoraInicio;
-    private LocalDateTime fechaHoraFin;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
 
     @Enumerated(EnumType.STRING)
-    private SessionStatus estado;
+    private SessionStatus status;
 
     // Constructors
     public Session() {}
@@ -33,48 +33,48 @@ public class Session {
         return idSession;
     }
 
-    public void setIdSession(Long idSesion) {
-        this.idSession = idSesion;
+    public void setIdSession(Long idSession) {
+        this.idSession = idSession;
     }
 
     public User getTherapist() {
         return therapist;
     }
 
-    public void setTherapist(Therapist terapeuta) {
-        this.therapist = terapeuta;
+    public void setTherapist(Therapist therapist) {
+        this.therapist = therapist;
     }
 
     public User getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient paciente) {
-        this.patient = paciente;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public LocalDateTime getFechaHoraInicio() {
-        return fechaHoraInicio;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setFechaHoraInicio(LocalDateTime fechaHoraInicio) {
-        this.fechaHoraInicio = fechaHoraInicio;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getFechaHoraFin() {
-        return fechaHoraFin;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setFechaHoraFin(LocalDateTime fechaHoraFin) {
-        this.fechaHoraFin = fechaHoraFin;
+    public void setEndDateTime(LocalDateTime EndDateTime) {
+        this.endDateTime = EndDateTime;
     }
 
-    public SessionStatus getEstado() {
-        return estado;
+    public SessionStatus getStatus() {
+        return status;
     }
 
-    public void setEstado(SessionStatus estado) {
-        this.estado = estado;
+    public void setStatus(SessionStatus status) {
+        this.status = status;
     }
 
     public Long getPatientId() {
