@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.service;
 
 import org.buffer.agendaterapeutas.model.Patient;
 import org.buffer.agendaterapeutas.repository.PatientRepository;
+import org.buffer.agendaterapeutas.vo.PatientVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +17,15 @@ public class PatientService implements IPatientService {
     }
 
     /*create patient*/
-    public Patient createPatient(Patient patient) throws Exception {
+    public Patient createPatient(PatientVO patientVO) throws Exception {
+
+        Patient patient = new Patient();
         if (patient.getId() != null && patientRepository.existsById(patient.getId())) {
             throw new Exception("Patient with id " + patient.getId() + " already exists");
         }
         return patientRepository.save(patient);
     }
+
 
     /*read patient*/
     public Patient getPatientById(Long id) throws Exception {

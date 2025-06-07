@@ -20,8 +20,8 @@ public class PatientController {
 
     /*create patient*/
     @PostMapping
-    public Patient createPatient(@RequestBody Patient patient) throws Exception {
-        return patientService.createPatient(patient);
+    public Patient createPatient(@RequestBody PatientVO patientVO) throws Exception {
+        return patientService.createPatient(patientVO);
     }
 
     /*read patient*/
