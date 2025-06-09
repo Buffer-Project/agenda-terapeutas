@@ -21,7 +21,7 @@ public class TherapistVO {
         if (therapist.getSpecialty() != null) {
             this.specialtyName = therapist.getSpecialty().getName();
         } else {
-            this.specialtyName = "";
+            this.specialtyName = null;
         }
 
         this.sessionIds = new ArrayList<>();
