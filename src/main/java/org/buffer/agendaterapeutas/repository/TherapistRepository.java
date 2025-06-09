@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface TherapistRepository extends JpaRepository<Therapist, Long> {
-    List<Therapist> findByActiveTrue(boolean active);
+    List<Therapist> findByUserActiveTrue();
 }

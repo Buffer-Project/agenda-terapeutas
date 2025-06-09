@@ -1,6 +1,7 @@
 package org.buffer.agendaterapeutas.service;
 
 import org.buffer.agendaterapeutas.model.Therapist;
+import org.buffer.agendaterapeutas.model.User;
 import org.buffer.agendaterapeutas.repository.TherapistRepository;
 import org.buffer.agendaterapeutas.vo.TherapistVO;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,14 @@ public class TherapistService implements ITherapistService {
 
         Therapist therapist = new Therapist();
 
+        User user = new User();
+
+        user.setFirstName(therapistVO.getFirstName());
+        user.setLastName(therapistVO.getLastName());
+        user.setUsername(therapistVO.getUsername());
+
         therapist.setId(therapistVO.getId());
-        therapist.setFirstName(therapistVO.getFirstName());
-        therapist.setLastName(therapistVO.getLastName());
-        therapist.setUsername(therapistVO.getUsername());
+        therapist.setUser(user);
 
         return therapistRepository.save(therapist);
     }
@@ -49,6 +54,6 @@ public class TherapistService implements ITherapistService {
     }
 
     public List<Therapist> getAllTherapists() {
-        return therapistRepository.findByActiveTrue(true);
+        return therapistRepository.findByUserActiveTrue();
     }
 }

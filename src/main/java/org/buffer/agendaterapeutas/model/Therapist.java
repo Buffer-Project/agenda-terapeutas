@@ -1,12 +1,19 @@
 package org.buffer.agendaterapeutas.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.List;
 
-@Entity
-@PrimaryKeyJoinColumn(name = "user_id")
-public class Therapist extends User {
+@Entity(name = "therapist")
+
+public class Therapist {
+
+    @Id
+    private Long id;
+    @OneToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private User user;
 
     @ManyToOne(optional = false)
     private Specialty specialty;
@@ -30,5 +37,21 @@ public class Therapist extends User {
 
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

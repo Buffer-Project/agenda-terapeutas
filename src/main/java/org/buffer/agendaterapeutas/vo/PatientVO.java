@@ -11,8 +11,8 @@ public class PatientVO {
 
     public PatientVO(Patient patient) {
         this.id = patient.getId();
-        this.name = patient.getFirstName() + " " + patient.getLastName();
-        this.email = patient.getEmail();
+        this.name = patient.getUser().getFirstName() + " " + patient.getUser().getLastName();
+        this.email = patient.getUser().getEmail();
         this.healthInsurance = patient.getHealthInsurance();
     }
 

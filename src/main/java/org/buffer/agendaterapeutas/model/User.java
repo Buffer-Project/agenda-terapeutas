@@ -2,8 +2,7 @@ package org.buffer.agendaterapeutas.model;
 
 import jakarta.persistence.*;
 
-@Entity(name="users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Entity (name = "users")
 public class User {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)

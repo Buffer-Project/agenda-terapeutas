@@ -33,11 +33,7 @@ public class Session {
         return idSession;
     }
 
-    public void setIdSession(Long idSession) {
-        this.idSession = idSession;
-    }
-
-    public User getTherapist() {
+    public Therapist getTherapist() {
         return therapist;
     }
 
@@ -45,12 +41,16 @@ public class Session {
         this.therapist = therapist;
     }
 
-    public User getPatient() {
+    public Patient getPatient() {
         return patient;
     }
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public void setIdSession(Long idSession) {
+        this.idSession = idSession;
     }
 
     public LocalDateTime getStartDateTime() {

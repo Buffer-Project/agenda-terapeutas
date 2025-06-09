@@ -18,32 +18,26 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    /*create patient*/
     @PostMapping
     public Patient createPatient(@RequestBody PatientVO patientVO) throws Exception {
         return patientService.createPatient(patientVO);
     }
 
-    /*read patient*/
     @GetMapping("/{id}")
     public PatientVO getPatientById(@PathVariable Long id) throws Exception {
         return new PatientVO(patientService.getPatientById(id));
     }
 
-    /*update patient*/
     @PutMapping
     public Patient updatePatient(@RequestBody Patient patient) throws Exception {
         return patientService.updatePatient(patient);
     }
 
-    /*delete patient (not permanently)*/
     @DeleteMapping("/{id}")
     public void deletePatient(@PathVariable Long id) throws Exception {
         patientService.deletePatientById(id);
     }
 
-
-    /*list patients*/
     @GetMapping
     public List<PatientVO> getAllPatients() {
         return patientService.getAllPatients()

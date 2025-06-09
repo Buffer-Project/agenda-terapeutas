@@ -9,14 +9,18 @@ import java.util.List;
 public class TherapistVO {
     private final Long id;
     private final String username;
-    private final String name;
+    private final String fullName;
+    private final String firstName;
+    private final String lastName;
     private final String specialtyName;
     private final List<Long> sessionIds;
 
     public TherapistVO(Therapist therapist) {
         this.id = therapist.getId();
-        this.name = therapist.getFirstName() + " " + therapist.getLastName();
-        this.username = therapist.getUsername();
+        this.firstName = therapist.getUser().getFirstName();
+        this.lastName = therapist.getUser().getLastName();
+        this.fullName = this.getFirstName() + " " + this.getLastName();
+        this.username = therapist.getUser().getUsername();
 
         if (therapist.getSpecialty() != null) {
             this.specialtyName = therapist.getSpecialty().getName();
@@ -39,8 +43,8 @@ public class TherapistVO {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getUsername() {
@@ -53,5 +57,13 @@ public class TherapistVO {
 
     public List<Long> getSessionIds() {
         return sessionIds;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

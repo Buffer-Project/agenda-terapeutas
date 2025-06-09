@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     boolean existsById(long id);
-    List<Patient> findByActiveTrue();
+    List<Patient> findByUserActiveTrue();
 }
