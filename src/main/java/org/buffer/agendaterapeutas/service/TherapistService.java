@@ -24,7 +24,6 @@ public class TherapistService implements ITherapistService {
         therapist.setFirstName(therapistVO.getFirstName());
         therapist.setLastName(therapistVO.getLastName());
         therapist.setUsername(therapistVO.getUsername());
-        therapist.setSpecialty(therapistVO.getSpecialtyName());
 
         return therapistRepository.save(therapist);
     }
@@ -50,6 +49,6 @@ public class TherapistService implements ITherapistService {
     }
 
     public List<Therapist> getAllTherapists() {
-        return therapistRepository.findByDeletedFalse();
+        return therapistRepository.findByActiveTrue(true);
     }
 }

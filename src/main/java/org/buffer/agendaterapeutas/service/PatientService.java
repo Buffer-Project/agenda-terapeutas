@@ -52,6 +52,6 @@ public class PatientService implements IPatientService {
 
     /*list patients*/
     public List<Patient> getAllPatients() {
-        return patientRepository.findByDeletedFalse();
+        return patientRepository.findByActiveTrue();
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
-    List<User> findByDeletedFalse();
+    List<User> findByActiveTrue();
 }

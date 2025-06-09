@@ -38,6 +38,7 @@ public class TherapistController {
         return new TherapistVO(therapistService.getTherapistById(therapistId));
     }
 
+    //TODO: replace delete logic with soft delete
     @GetMapping
     public List<TherapistVO> getAllTherapists() {
         return therapistService.getAllTherapists()

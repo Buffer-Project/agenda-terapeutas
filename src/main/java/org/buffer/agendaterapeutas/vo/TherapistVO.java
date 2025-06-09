@@ -8,16 +8,14 @@ import java.util.List;
 
 public class TherapistVO {
     private final Long id;
-    private final String firstName;
-    private final String lastName;
     private final String username;
+    private final String name;
     private final String specialtyName;
     private final List<Long> sessionIds;
 
     public TherapistVO(Therapist therapist) {
         this.id = therapist.getId();
-        this.firstName = therapist.getFirstName();
-        this.lastName = therapist.getLastName();
+        this.name = therapist.getFirstName() + " " + therapist.getLastName();
         this.username = therapist.getUsername();
 
         if (therapist.getSpecialty() != null) {
@@ -41,11 +39,9 @@ public class TherapistVO {
         return id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
-
-    public String getLastName() { return lastName; }
 
     public String getUsername() {
         return username;

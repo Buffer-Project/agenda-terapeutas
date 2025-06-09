@@ -18,7 +18,7 @@ public class User {
     private int birthDate;
 
     /*attribute for a soft delete*/
-    private boolean deleted = false;
+    private boolean active = true;
 
 
     public Long getId() {
@@ -75,8 +75,8 @@ public class User {
 
     public void setBirthDate(int birthDate) { this.birthDate = birthDate; }
 
-    public boolean isDeleted() { return deleted; }
+    public boolean isActive() { return active; }
 
-    public void setDeleted(boolean deleted) { this.deleted = deleted; }
-    
+    public void setActive(boolean active) { this.active = active; }
+
 }
