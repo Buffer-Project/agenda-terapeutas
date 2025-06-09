@@ -31,10 +31,7 @@ public class TherapistVO {
         this.sessionIds = new ArrayList<>();
         if (therapist.getSessions() != null) {
             for (Session session : therapist.getSessions()) {
-                Long patientId = session.getPatientId();
-                if (patientId != null) {
-                    this.sessionIds.add(patientId);
-                }
+                sessionIds.add(session.getIdSession());
             }
         }
     }

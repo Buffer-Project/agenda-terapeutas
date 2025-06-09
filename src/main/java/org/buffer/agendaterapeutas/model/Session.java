@@ -77,7 +77,4 @@ public class Session {
         this.status = status;
     }
 
-    public Long getPatientId() {
-        return null;
-    }
 }
