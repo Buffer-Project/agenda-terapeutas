@@ -19,8 +19,8 @@ public class TherapistController {
     }
 
     @PostMapping
-    public Therapist createTherapist(@RequestBody Therapist therapist) throws Exception {
-        return therapistService.createTherapist(therapist);
+    public Therapist createTherapist(@RequestBody TherapistVO therapistVO) throws Exception {
+        return therapistService.createTherapist(therapistVO);
     }
 
     @PutMapping

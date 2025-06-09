@@ -42,7 +42,7 @@ public class PatientService implements IPatientService {
         return patientRepository.save(patient);
     }
 
-    /*delete patient (not permanently)*/
+    //TODO: replace delete logic with soft delete
     public void deletePatientById(Long id) throws Exception {
         if (!patientRepository.existsById(id)) {
             throw new Exception("Patient not found with id: " + id);

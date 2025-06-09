@@ -1,11 +1,12 @@
 package org.buffer.agendaterapeutas.service;
 
 import org.buffer.agendaterapeutas.model.Therapist;
+import org.buffer.agendaterapeutas.vo.TherapistVO;
 
 import java.util.List;
 
 public interface ITherapistService {
-    Therapist createTherapist(Therapist therapist);
+    Therapist createTherapist(TherapistVO therapist);
 
     Therapist updateTherapist(Therapist therapist) throws Exception;
 
