@@ -26,10 +26,10 @@ public class UserController {
     }
 
     @DeleteMapping
-    public void deleteUser(User user) throws Exception {}
+    public void deleteUser(User user) {}
 
     @GetMapping("/{userId}")  //api/v1/user/358
-    public UserVO getUserById(@PathVariable Long userId) throws Exception {
+    public UserVO getUserById(@PathVariable Long userId) {
        return new UserVO(userService.getUserById(userId));
     }
 }

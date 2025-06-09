@@ -22,7 +22,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserById(Long id) throws Exception {
+    public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow();
     }
+
+
+
 }
