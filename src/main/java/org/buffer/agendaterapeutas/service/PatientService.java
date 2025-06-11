@@ -16,7 +16,7 @@ public class PatientService implements IPatientService {
         this.patientRepository = patientRepository;
     }
 
-    /*create patient*/
+
     public Patient createPatient(PatientVO patientVO) throws Exception {
 
         Patient patient = new Patient();
@@ -26,14 +26,11 @@ public class PatientService implements IPatientService {
         return patientRepository.save(patient);
     }
 
-
-    /*read patient*/
     public Patient getPatientById(Long id) throws Exception {
         return patientRepository.findById(id)
                 .orElseThrow(() -> new Exception("Patient not found with id: " + id));
     }
 
-    /*update patient*/
     public Patient updatePatient(Patient patient) throws Exception {
         Long id = patient.getId();
         if (id == null || !patientRepository.existsById(id)) {
@@ -42,7 +39,6 @@ public class PatientService implements IPatientService {
         return patientRepository.save(patient);
     }
 
-    //TODO: replace delete logic with soft delete
     public void deletePatientById(Long id) throws Exception {
         if (!patientRepository.existsById(id)) {
             throw new Exception("Patient not found with id: " + id);
@@ -50,7 +46,6 @@ public class PatientService implements IPatientService {
         patientRepository.deleteById(id);
     }
 
-    /*list patients*/
     public List<Patient> getAllPatients() {
         return patientRepository.findByUserActiveTrue();
     }
