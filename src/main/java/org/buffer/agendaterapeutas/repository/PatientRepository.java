@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     boolean existsById(long id);
+    boolean existsByUserEmail(String email);
     List<Patient> findByUserActiveTrue();
 }
