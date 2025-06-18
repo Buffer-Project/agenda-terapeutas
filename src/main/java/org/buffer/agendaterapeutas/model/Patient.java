@@ -1,6 +1,7 @@
 package org.buffer.agendaterapeutas.model;
 
 import jakarta.persistence.*;
+import org.buffer.agendaterapeutas.vo.PatientVO;
 
 @Entity(name = "patient")
 public class Patient {
@@ -14,6 +15,13 @@ public class Patient {
 
 
     public Patient() {}
+
+    public Patient(PatientVO patientVO) {
+        this.id = patientVO.getId();
+        User user = new User();
+        user.setEmail(patientVO.getEmail());
+        this.user = user;
+    }
 
 
     public String getHealthInsurance() { return healthInsurance; }
