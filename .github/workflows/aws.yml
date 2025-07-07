@@ -35,7 +35,7 @@ env:
   ECR_REPOSITORY: scheduler-dev           # set this to your Amazon ECR repository name
   ECS_SERVICE: scheduler-dev-task-service-vglad0co                 # set this to your Amazon ECS service name
   ECS_CLUSTER: scheduler-dev-cluster                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: scheduler-dev-task # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: .aws/scheduler-dev-task.json # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: scheduler-dev-container           # set this to the name of the container in the
 
