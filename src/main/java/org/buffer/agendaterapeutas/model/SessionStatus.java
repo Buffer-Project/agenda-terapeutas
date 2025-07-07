@@ -1,6 +1,6 @@
 package org.buffer.agendaterapeutas.model;
 
-public enum EstadoSesion {
+public enum SessionStatus {
     Reservado,
     Cancelado,
     Reprogramado,

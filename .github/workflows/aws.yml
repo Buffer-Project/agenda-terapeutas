@@ -38,6 +38,7 @@ env:
   ECS_TASK_DEFINITION: scheduler-dev-task # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
   CONTAINER_NAME: scheduler-dev-container           # set this to the name of the container in the
+
                                                # containerDefinitions section of your task definition
 
 permissions:
