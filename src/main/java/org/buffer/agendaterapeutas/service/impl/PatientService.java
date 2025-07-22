@@ -1,7 +1,8 @@
-package org.buffer.agendaterapeutas.service;
+package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.model.Patient;
 import org.buffer.agendaterapeutas.repository.PatientRepository;
+import org.buffer.agendaterapeutas.service.IPatientService;
 import org.buffer.agendaterapeutas.vo.PatientVO;
 import org.springframework.stereotype.Service;
 

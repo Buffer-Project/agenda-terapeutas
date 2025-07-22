@@ -1,12 +1,21 @@
 package org.buffer.agendaterapeutas.service;
 
 import org.buffer.agendaterapeutas.model.Session;
+import org.buffer.agendaterapeutas.vo.SessionVO;
 
 import java.util.List;
 
 public interface ISessionService {
-    Session createSession(Session session) throws Exception;
+    Session createSession(SessionVO sessionVO);
 
-    List<Session> listAllSessions();
+    Session getSessionById(Long id);
+
+    List<Session> getAllSessions();
+
+    Session updateSession(Session session);
+
+    void deleteSession(Long id);
+
+
 }
 

@@ -1,19 +1,25 @@
-package org.buffer.agendaterapeutas.service;
+package org.buffer.agendaterapeutas.service.impl;
 
+import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
 import org.buffer.agendaterapeutas.model.Patient;
 import org.buffer.agendaterapeutas.model.Session;
 import org.buffer.agendaterapeutas.model.Therapist;
 import org.buffer.agendaterapeutas.repository.PatientRepository;
 import org.buffer.agendaterapeutas.repository.SessionRepository;
 import org.buffer.agendaterapeutas.repository.TherapistRepository;
+import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.vo.SessionVO;
 import org.springframework.stereotype.Service;
+import org.buffer.agendaterapeutas.exception.SessionNotFoundException;
+import org.buffer.agendaterapeutas.exception.PatientNotFoundException;
+import org.buffer.agendaterapeutas.exception.TherapistNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class SessionService {
+public class SessionService implements ISessionService {
 
     private final SessionRepository sessionRepository;
     private final PatientRepository patientRepository;
@@ -25,44 +31,50 @@ public class SessionService {
         this.therapistRepository = therapistRepository;
     }
 
-    public Session createSession(SessionVO sessionVO) throws Exception {
+    @Override
+    public Session createSession(SessionVO sessionVO) {
         Therapist therapist = therapistRepository.findById(sessionVO.getTherapistId())
-                .orElseThrow(() -> new Exception("Therapist not found with id: " + sessionVO.getTherapistId()));
+                .orElseThrow(TherapistNotFoundException::new);
 
         Patient patient = patientRepository.findById(sessionVO.getPatientId())
-                .orElseThrow(() -> new Exception("Patient not found with id: " + sessionVO.getPatientId()));
+                .orElseThrow(PatientNotFoundException::new);
 
         Session session = new Session();
         session.setTherapist(therapist);
         session.setPatient(patient);
         session.setStartDateTime(LocalDateTime.parse(sessionVO.getStartDateTime()));
         session.setEndDateTime(LocalDateTime.parse(sessionVO.getEndDateTime()));
-        session.setStatus(sessionVO.getStatus());
+        session.setStatus(SessionStatusEnum.RESERVED); //Aca entiendo que deberia ir siempre en pending al crearlo
 
         return sessionRepository.save(session);
     }
 
-    public Session getSessionById(Long id) throws Exception {
-        return sessionRepository.findById(id)
-                .orElseThrow(() -> new Exception("Session not found with id: " + id));
+    @Override
+    public Session getSessionById(Long id) {
+        Optional<Session> session = sessionRepository.findById(id);
+        return session.orElseThrow(SessionNotFoundException::new);
     }
 
-    public Session updateSession(Session session) throws Exception {
-        Long id = session.getIdSession();
-        if (id == null || !sessionRepository.existsById(id)) {
-            throw new Exception("Session not found with id: " + id);
+    @Override
+    public Session updateSession(Session session) {
+
+        if (session.getIdSession() == null || !sessionRepository.existsById(session.getIdSession())) {
+            throw new SessionNotFoundException();
         }
         return sessionRepository.save(session);
     }
 
-    public void deleteSession(Long id) throws Exception {
-        if (!sessionRepository.existsById(id)) {
-            throw new Exception("Session not found with id: " + id);
+    @Override
+    public void deleteSession(Long id) {
+        Optional<Session> session = sessionRepository.findById(id);
+        if (session.isEmpty()) {
+            throw new SessionNotFoundException();
         }
         sessionRepository.deleteById(id);
     }
 
     public List<Session> getAllSessions() {
-        return sessionRepository.findAll(); 
+        return sessionRepository.findAll();
     }
+
 }

@@ -1,7 +1,7 @@
 package org.buffer.agendaterapeutas.controller;
 
 import org.buffer.agendaterapeutas.model.Patient;
-import org.buffer.agendaterapeutas.service.PatientService;
+import org.buffer.agendaterapeutas.service.impl.PatientService;
 import org.buffer.agendaterapeutas.vo.PatientVO;
 import org.springframework.web.bind.annotation.*;
 
