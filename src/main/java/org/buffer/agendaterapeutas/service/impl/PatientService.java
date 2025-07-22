@@ -20,11 +20,10 @@ public class PatientService implements IPatientService {
 
     public Patient createPatient(PatientVO patientVO) throws Exception {
 
-        Patient patient = new Patient();
-        if (patient.getId() != null && patientRepository.existsById(patient.getId())) {
-            throw new Exception("Patient with id " + patient.getId() + " already exists");
+        if (patientRepository.existsByUserEmail(patientVO.getEmail())) {
+            throw new Exception("E-mail already registered");
         }
-        return patientRepository.save(patient);
+        return patientRepository.save(new Patient(patientVO));
     }
 
     public Patient getPatientById(Long id) throws Exception {
