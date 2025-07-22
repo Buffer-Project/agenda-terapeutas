@@ -1,37 +1,41 @@
-package org.buffer.agendaterapeutas.model;
+package org.buffer.agendaterapeutas.BusinessObject;
 
-import jakarta.persistence.*;
+
+
 import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
+import org.buffer.agendaterapeutas.model.Patient;
+import org.buffer.agendaterapeutas.model.Therapist;
 
 import java.time.LocalDateTime;
 
-@Entity
-public class Session {
+public class SessionBO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idSession;
-
-    @ManyToOne
-    @JoinColumn(name = "id_therapist")
     private Therapist therapist;
-
-    @ManyToOne
-    @JoinColumn(name = "id_patient")
     private Patient patient;
-
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-
-    @Enumerated(EnumType.STRING)
     private SessionStatusEnum status;
 
-    // Constructors
-    public Session() {}
+    public SessionBO() {
 
-    // Getters y Setters
+    }
+
+    public SessionBO(Long idSession, Therapist therapist, Patient patient, LocalDateTime startDateTime, LocalDateTime endDateTime, SessionStatusEnum status) {
+        this.idSession = idSession;
+        this.therapist = therapist;
+        this.patient = patient;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.status = status;
+    }
+
     public Long getIdSession() {
         return idSession;
+    }
+
+    public void setIdSession(Long idSession) {
+        this.idSession = idSession;
     }
 
     public Therapist getTherapist() {
@@ -50,10 +54,6 @@ public class Session {
         this.patient = patient;
     }
 
-    public void setIdSession(Long idSession) {
-        this.idSession = idSession;
-    }
-
     public LocalDateTime getStartDateTime() {
         return startDateTime;
     }
@@ -66,8 +66,8 @@ public class Session {
         return endDateTime;
     }
 
-    public void setEndDateTime(LocalDateTime EndDateTime) {
-        this.endDateTime = EndDateTime;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public SessionStatusEnum getStatus() {
@@ -77,5 +77,4 @@ public class Session {
     public void setStatus(SessionStatusEnum status) {
         this.status = status;
     }
-
 }
