@@ -1,8 +1,9 @@
 package org.buffer.agendaterapeutas.service;
 
-import org.buffer.agendaterapeutas.model.User;
+
+import org.buffer.agendaterapeutas.model.vo.UserVO;
 
 public interface IUserService {
-    User createUser(User user) throws Exception;
-    User getUserById(Long id) ;
+    UserVO createUser(UserVO user);
+    UserVO getUserById(Long id) ;
 }

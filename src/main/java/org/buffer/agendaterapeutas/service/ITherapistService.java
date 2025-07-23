@@ -1,18 +1,20 @@
 package org.buffer.agendaterapeutas.service;
 
-import org.buffer.agendaterapeutas.model.Therapist;
-import org.buffer.agendaterapeutas.vo.TherapistVO;
+import org.buffer.agendaterapeutas.model.entity.Therapist;
+import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 
 import java.util.List;
 
 public interface ITherapistService {
-    Therapist createTherapist(TherapistVO therapist);
+    TherapistVO createTherapist(TherapistVO therapist);
 
-    Therapist updateTherapist(Therapist therapist) throws Exception;
+    TherapistVO updateTherapist(TherapistVO therapist,Long id) ;
 
-    void deleteTherapistById(Long therapistId) throws Exception;
+    void deleteTherapistById(Long therapistId) ;
 
-    Therapist getTherapistById(Long id) throws Exception;
+    TherapistVO getTherapistById(Long id);
 
-    List<Therapist> getAllTherapists() ;
+    List<TherapistVO> getAllTherapists();
+
+
 }

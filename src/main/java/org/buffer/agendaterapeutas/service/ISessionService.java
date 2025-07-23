@@ -1,20 +1,27 @@
 package org.buffer.agendaterapeutas.service;
 
-import org.buffer.agendaterapeutas.model.Session;
-import org.buffer.agendaterapeutas.vo.SessionVO;
+import org.buffer.agendaterapeutas.model.vo.SessionVO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ISessionService {
-    Session createSession(SessionVO sessionVO);
+    SessionVO createSession(SessionVO sessionVO);
 
-    Session getSessionById(Long id);
+    SessionVO getSessionById(Long id);
 
-    List<Session> getAllSessions();
+    List<SessionVO> getAllSessions();
 
-    Session updateSession(Session session);
+    List<SessionVO> getSessionsByDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    SessionVO updateSession(SessionVO session,Long id);
 
     void deleteSession(Long id);
+
+    void cancelSession(Long id);
+
+    List<SessionVO> getSessionsByTherapistId(Long therapistId);
+
 
 
 }

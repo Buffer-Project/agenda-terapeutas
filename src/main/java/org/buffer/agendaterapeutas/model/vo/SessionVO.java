@@ -1,27 +1,22 @@
-package org.buffer.agendaterapeutas.BusinessObject;
+package org.buffer.agendaterapeutas.model.vo;
 
-
-
+import org.buffer.agendaterapeutas.model.bo.SessionBO;
 import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
-import org.buffer.agendaterapeutas.model.Patient;
-import org.buffer.agendaterapeutas.model.Therapist;
-
 import java.time.LocalDateTime;
 
-public class SessionBO {
+public class SessionVO {
 
     private Long idSession;
-    private Therapist therapist;
-    private Patient patient;
+    private TherapistVO therapist;
+    private PatientVO patient;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private SessionStatusEnum status;
 
-    public SessionBO() {
-
+    public SessionVO() {
     }
 
-    public SessionBO(Long idSession, Therapist therapist, Patient patient, LocalDateTime startDateTime, LocalDateTime endDateTime, SessionStatusEnum status) {
+    public SessionVO(Long idSession, TherapistVO therapist, PatientVO patient, LocalDateTime startDateTime, LocalDateTime endDateTime, SessionStatusEnum status) {
         this.idSession = idSession;
         this.therapist = therapist;
         this.patient = patient;
@@ -29,6 +24,19 @@ public class SessionBO {
         this.endDateTime = endDateTime;
         this.status = status;
     }
+
+
+    public SessionVO(SessionBO sessionBO) {
+        if (sessionBO != null) {
+            this.idSession = sessionBO.getIdSession();
+            this.therapist = sessionBO.getTherapist() != null ? new TherapistVO(sessionBO.getTherapist()) : null;
+            this.patient = sessionBO.getPatient() != null ? new PatientVO(sessionBO.getPatient()) : null;
+            this.startDateTime = sessionBO.getStartDateTime();
+            this.endDateTime = sessionBO.getEndDateTime();
+            this.status = sessionBO.getStatus();
+        }
+    }
+
 
     public Long getIdSession() {
         return idSession;
@@ -38,19 +46,19 @@ public class SessionBO {
         this.idSession = idSession;
     }
 
-    public Therapist getTherapist() {
+    public TherapistVO getTherapist() {
         return therapist;
     }
 
-    public void setTherapist(Therapist therapist) {
+    public void setTherapist(TherapistVO therapist) {
         this.therapist = therapist;
     }
 
-    public Patient getPatient() {
+    public PatientVO getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(PatientVO patient) {
         this.patient = patient;
     }
 

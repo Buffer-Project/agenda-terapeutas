@@ -1,8 +1,10 @@
 package org.buffer.agendaterapeutas.controller;
 
-import org.buffer.agendaterapeutas.model.Patient;
-import org.buffer.agendaterapeutas.service.impl.PatientService;
-import org.buffer.agendaterapeutas.vo.PatientVO;
+import org.buffer.agendaterapeutas.exception.SchedulerException;
+import org.buffer.agendaterapeutas.service.IPatientService;
+import org.buffer.agendaterapeutas.service.impl.PatientServiceImpl;
+import org.buffer.agendaterapeutas.model.vo.PatientVO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,37 +14,59 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/patient")
 public class PatientController {
 
-    private final PatientService patientService;
+    private final IPatientService patientService;
 
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientServiceImpl patientService) {
         this.patientService = patientService;
     }
 
     @PostMapping
-    public Patient createPatient(@RequestBody PatientVO patientVO) throws Exception {
-        return patientService.createPatient(patientVO);
+    public ResponseEntity<PatientVO> createPatient(@RequestBody PatientVO patientVO) {
+        try {
+            PatientVO response = patientService.createPatient(patientVO);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new SchedulerException(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public PatientVO getPatientById(@PathVariable Long id) throws Exception {
-        return new PatientVO(patientService.getPatientById(id));
+    public ResponseEntity<PatientVO> getPatientById(@PathVariable Long id) {
+        try {
+            PatientVO response = patientService.getPatientById(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new SchedulerException(e.getMessage());
+        }
     }
 
-    @PutMapping
-    public Patient updatePatient(@RequestBody Patient patient) throws Exception {
-        return patientService.updatePatient(patient);
+    @PutMapping("/{id}")
+    public ResponseEntity<PatientVO> updatePatient(@RequestBody PatientVO patient, @PathVariable Long id) {
+        try {
+            PatientVO response = patientService.updatePatient(patient, id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new SchedulerException(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deletePatient(@PathVariable Long id) throws Exception {
-        patientService.deletePatientById(id);
+    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+        try {
+            patientService.deletePatientById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new SchedulerException(e.getMessage());
+        }
     }
 
-    @GetMapping
-    public List<PatientVO> getAllPatients() {
-        return patientService.getAllPatients()
-                .stream()
-                .map(PatientVO::new)
-                .collect(Collectors.toList());
+    @GetMapping("/findAll")
+    public ResponseEntity<List<PatientVO>> getAllPatients() {
+        try {
+            List<PatientVO> response = patientService.getAllPatients();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new SchedulerException(e.getMessage());
+        }
     }
 }

@@ -1,7 +1,7 @@
-package org.buffer.agendaterapeutas.model;
+package org.buffer.agendaterapeutas.model.entity;
 
 import jakarta.persistence.*;
-import org.buffer.agendaterapeutas.vo.PatientVO;
+import org.buffer.agendaterapeutas.model.bo.PatientBO;
 
 @Entity(name = "patient")
 public class Patient {
@@ -16,11 +16,16 @@ public class Patient {
 
     public Patient() {}
 
-    public Patient(PatientVO patientVO) {
-        this.id = patientVO.getId();
-        User user = new User();
-        user.setEmail(patientVO.getEmail());
+    public Patient(Long id, User user, String healthInsurance) {
+        this.id = id;
         this.user = user;
+        this.healthInsurance = healthInsurance;
+    }
+
+    public Patient(PatientBO patientBO) {
+        this.id = patientBO.getId();
+        this.user = patientBO.getUser() != null ? new User(patientBO.getUser()) : null;
+        this.healthInsurance = patientBO.getHealthInsurance();
     }
 
 
