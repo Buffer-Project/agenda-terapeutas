@@ -22,51 +22,31 @@ public class PatientController {
 
     @PostMapping
     public ResponseEntity<PatientVO> createPatient(@RequestBody PatientVO patientVO) {
-        try {
-            PatientVO response = patientService.createPatient(patientVO);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        PatientVO response = patientService.createPatient(patientVO);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PatientVO> getPatientById(@PathVariable Long id) {
-        try {
-            PatientVO response = patientService.getPatientById(id);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        PatientVO response = patientService.getPatientById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PatientVO> updatePatient(@RequestBody PatientVO patient, @PathVariable Long id) {
-        try {
-            PatientVO response = patientService.updatePatient(patient, id);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        PatientVO response = patientService.updatePatient(patient, id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
-        try {
-            patientService.deletePatientById(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        patientService.deletePatientById(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/findAll")
     public ResponseEntity<List<PatientVO>> getAllPatients() {
-        try {
-            List<PatientVO> response = patientService.getAllPatients();
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        List<PatientVO> response = patientService.getAllPatients();
+        return ResponseEntity.ok(response);
     }
 }

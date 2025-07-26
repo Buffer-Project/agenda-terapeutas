@@ -1,13 +1,10 @@
 package org.buffer.agendaterapeutas.service.impl;
 
-import org.buffer.agendaterapeutas.exception.SchedulerException;
-import org.buffer.agendaterapeutas.exception.TherapistNotFoundException;
-import org.buffer.agendaterapeutas.model.bo.SessionBO;
+import org.buffer.agendaterapeutas.exception.TherapistException;
+import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.model.bo.TherapistBO;
-import org.buffer.agendaterapeutas.model.entity.Session;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
-import org.buffer.agendaterapeutas.model.vo.SessionVO;
 import org.buffer.agendaterapeutas.repository.ISessionRepository;
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
 import org.buffer.agendaterapeutas.service.ITherapistService;
@@ -21,11 +18,9 @@ import java.util.Optional;
 public class TherapistServiceImpl implements ITherapistService {
 
     private final ITherapistRepository therapistRepository;
-    private final ISessionRepository sessionRepository;
 
-    public TherapistServiceImpl(ITherapistRepository therapistRepository, ISessionRepository sessionRepository) {
+    public TherapistServiceImpl(ITherapistRepository therapistRepository) {
         this.therapistRepository = therapistRepository;
-        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -49,24 +44,17 @@ public class TherapistServiceImpl implements ITherapistService {
     @Override
     public TherapistVO updateTherapist(TherapistVO therapist, Long id) {
 
-        if (id == null) {
-            throw new TherapistNotFoundException("El ID del terapeuta no puede ser null");
+        if (id == null || therapist.getId() == null) {
+            throw new TherapistException(TherapistError.MISSING_ID);
         }
-
-        if (therapist.getId() == null) {
-            throw new TherapistNotFoundException("El ID del terapeuta en el objeto no puede ser null");
-        }
-
 
         if (!therapist.getId().equals(id)) {
-            throw new TherapistNotFoundException("El ID del terapeuta no coincide con el ID de la URL");
+            throw new TherapistException(TherapistError.ID_CONFLICT);
         }
-
 
         if (!therapistRepository.existsById(id)) {
-            throw new TherapistNotFoundException("Terapeuta no encontrado con ID: " + id);
+            throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
-
 
         TherapistBO therapistBO = new TherapistBO(therapist);
         Therapist updatedTherapist = therapistRepository.save(new Therapist(therapistBO));
@@ -77,7 +65,7 @@ public class TherapistServiceImpl implements ITherapistService {
     public void deleteTherapistById(Long id) {
         Optional<Therapist> therapist = therapistRepository.findById(id);
         if (therapist.isEmpty()) {
-            throw new TherapistNotFoundException();
+            throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
         therapistRepository.deleteById(id);
     }
@@ -86,7 +74,7 @@ public class TherapistServiceImpl implements ITherapistService {
     public TherapistVO getTherapistById(Long id) {
         Optional<Therapist> therapist = therapistRepository.findById(id);
         if (therapist.isEmpty()) {
-            throw new TherapistNotFoundException();
+            throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
         TherapistBO therapistBO = new TherapistBO(therapist.get());
         return new TherapistVO(therapistBO);

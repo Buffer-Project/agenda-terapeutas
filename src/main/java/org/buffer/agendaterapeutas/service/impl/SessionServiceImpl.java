@@ -1,6 +1,9 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.SchedulerException;
+import org.buffer.agendaterapeutas.exception.errors.PatientError;
+import org.buffer.agendaterapeutas.exception.errors.SessionError;
+import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.model.bo.SessionBO;
 import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
 import org.buffer.agendaterapeutas.model.entity.Patient;
@@ -12,9 +15,9 @@ import org.buffer.agendaterapeutas.repository.ITherapistRepository;
 import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.model.vo.SessionVO;
 import org.springframework.stereotype.Service;
-import org.buffer.agendaterapeutas.exception.SessionNotFoundException;
-import org.buffer.agendaterapeutas.exception.PatientNotFoundException;
-import org.buffer.agendaterapeutas.exception.TherapistNotFoundException;
+import org.buffer.agendaterapeutas.exception.SessionException;
+import org.buffer.agendaterapeutas.exception.PatientException;
+import org.buffer.agendaterapeutas.exception.TherapistException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,17 +42,17 @@ public class SessionServiceImpl implements ISessionService {
     @Override
     public SessionVO createSession(SessionVO sessionVO) {
         Therapist therapist = therapistRepository.findById(sessionVO.getTherapist().getId())
-                .orElseThrow(TherapistNotFoundException::new);
+                .orElseThrow(() -> new TherapistException(TherapistError.NOT_FOUND, sessionVO.getTherapist().getId()));
 
         Patient patient = patientRepository.findById(sessionVO.getPatient().getId())
-                .orElseThrow(PatientNotFoundException::new);
+                .orElseThrow(() -> new PatientException(PatientError.NOT_FOUND, sessionVO.getPatient().getId()));
 
         Session session = new Session();
         session.setTherapist(therapist);
         session.setPatient(patient);
         session.setStartDateTime(sessionVO.getStartDateTime());
         session.setEndDateTime(sessionVO.getEndDateTime());
-        session.setStatus(SessionStatusEnum.RESERVED); //Aca entiendo que deberia ir siempre en pending al crearlo
+        session.setStatus(SessionStatusEnum.RESERVED);
 
         Session savedSession = sessionRepository.save(session);
         SessionBO sessionBO = new SessionBO(savedSession);
@@ -61,7 +64,7 @@ public class SessionServiceImpl implements ISessionService {
     public SessionVO getSessionById(Long id) {
         Optional<Session> session = sessionRepository.findById(id);
         if (session.isEmpty()) {
-            throw new SessionNotFoundException();
+            throw new SessionException(SessionError.NOT_FOUND, id);
         }
         SessionBO sessionBO = new SessionBO(session.get());
         return new SessionVO(sessionBO);
@@ -70,20 +73,16 @@ public class SessionServiceImpl implements ISessionService {
     @Override
     public SessionVO updateSession(SessionVO session, Long id) {
 
-        if (id == null) {
-            throw new SessionNotFoundException("El ID de la sesión no puede ser null");
-        }
-
-        if (session.getIdSession() == null) {
-            throw new SessionNotFoundException("El ID de la sesión en el objeto no puede ser null");
+        if (id == null || session.getIdSession() == null) {
+            throw new SessionException(SessionError.MISSING_ID);
         }
 
         if (!session.getIdSession().equals(id)) {
-            throw new SessionNotFoundException("El ID de la sesión no coincide con el ID de la URL");
+            throw new SessionException(SessionError.ID_CONFLICT);
         }
 
         if (!sessionRepository.existsById(id)) {
-            throw new SessionNotFoundException("La sesión con ID " + id + " no existe");
+            throw new SessionException(SessionError.NOT_FOUND, id);
         }
 
         SessionBO sessionBO = new SessionBO(session);
@@ -95,7 +94,7 @@ public class SessionServiceImpl implements ISessionService {
     public void deleteSession(Long id) {
         Optional<Session> session = sessionRepository.findById(id);
         if (session.isEmpty()) {
-            throw new SessionNotFoundException();
+            throw new SessionException(SessionError.NOT_FOUND);
         }
         sessionRepository.deleteById(id);
     }
@@ -104,13 +103,13 @@ public class SessionServiceImpl implements ISessionService {
     public void cancelSession(Long id) {
         Optional<Session> session = sessionRepository.findById(id);
         if (session.isEmpty()) {
-            throw new SessionNotFoundException();
+            throw new SessionException(SessionError.NOT_FOUND);
         }
         if (session.get().getStartDateTime().isAfter(LocalDateTime.now())) {
             session.get().setStatus(SessionStatusEnum.CANCELED);
             sessionRepository.save(session.get());
         } else {
-            throw new SchedulerException("No se puede cancelar una sesion pasada"); //TODO: Mejorar
+            throw new SessionException(SessionError.CANNOT_CANCEL_PAST_SESSION);
         }
 
     }
