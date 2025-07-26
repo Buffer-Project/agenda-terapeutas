@@ -19,65 +19,40 @@ public class SessionController {
         this.sessionService = sessionService;
     }
 
-
     @PostMapping()
     public ResponseEntity<SessionVO> createSession(@RequestBody SessionVO sessionVO) {
-        try {
-            SessionVO response = sessionService.createSession(sessionVO);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        SessionVO response = sessionService.createSession(sessionVO);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SessionVO> getSessionById(@PathVariable Long id) {
-        try {
-            SessionVO response = sessionService.getSessionById(id);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        SessionVO response = sessionService.getSessionById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SessionVO> updateSession(@RequestBody SessionVO session, @PathVariable Long id) {
-        try {
-            SessionVO response = sessionService.updateSession(session, id);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        SessionVO response = sessionService.updateSession(session, id);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
-        try {
-            sessionService.deleteSession(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        sessionService.deleteSession(id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/cancelReservation/{id}")
     public ResponseEntity<Void> cancelSession(@PathVariable Long id) {
-        try {
-            sessionService.cancelSession(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
+        sessionService.cancelSession(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/findAll")
     public ResponseEntity<List<SessionVO>> getAllSessions() {
-        try {
-            List<SessionVO> response = sessionService.getAllSessions();
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        List<SessionVO> response = sessionService.getAllSessions();
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/range")
@@ -85,22 +60,14 @@ public class SessionController {
             @RequestParam LocalDateTime startDate,
             @RequestParam LocalDateTime endDate
     ) {
-        try {
-            List<SessionVO> response = sessionService.getSessionsByDateRange(startDate, endDate);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        List<SessionVO> response = sessionService.getSessionsByDateRange(startDate, endDate);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{therapistId}")
     public ResponseEntity<List<SessionVO>> getSessionsByTherapist(@PathVariable Long therapistId) {
-        try {
-            List<SessionVO> response = sessionService.getSessionsByTherapistId(therapistId);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        List<SessionVO> response = sessionService.getSessionsByTherapistId(therapistId);
+        return ResponseEntity.ok(response);
     }
 
 }

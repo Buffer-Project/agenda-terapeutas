@@ -1,6 +1,7 @@
 package org.buffer.agendaterapeutas.controller;
 
 import org.buffer.agendaterapeutas.exception.SchedulerException;
+import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.service.IUserService;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
@@ -19,12 +20,8 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserVO> createUser(@RequestBody UserVO user) {
-        try {
-            UserVO response = userService.createUser(user);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        UserVO response = userService.createUser(user);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping
@@ -41,11 +38,7 @@ public class UserController {
 
     @GetMapping("/{userId}")  //api/v1/user/358
     public ResponseEntity<UserVO> getUserById(@PathVariable Long userId) {
-        try{
-            UserVO response = userService.getUserById(userId);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        UserVO response = userService.getUserById(userId);
+        return ResponseEntity.ok(response);
     }
 }

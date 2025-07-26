@@ -1,8 +1,8 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 
-import org.buffer.agendaterapeutas.exception.EmailAlreadyTakenException;
-import org.buffer.agendaterapeutas.exception.UserNotFoundException;
+import org.buffer.agendaterapeutas.exception.UserException;
+import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.bo.UserBO;
 import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserVO createUser(UserVO user) {
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new EmailAlreadyTakenException("User with email " + user.getEmail() + " already exists");
+            throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
         }
         User savedUser = userRepository.save(new User(new UserBO(user)));
         UserBO userBO = new UserBO(savedUser);
@@ -37,7 +37,7 @@ public class UserServiceImpl implements IUserService {
     public UserVO getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException("User with id " + id + " not found");
+            throw new UserException(UserError.NOT_FOUND);
         }
         UserBO userBO = new UserBO(user.get());
         return new UserVO(userBO);

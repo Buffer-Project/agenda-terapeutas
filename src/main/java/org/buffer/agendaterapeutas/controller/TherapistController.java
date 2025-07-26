@@ -24,53 +24,31 @@ public class TherapistController {
 
     @PostMapping
     public ResponseEntity<TherapistVO> createTherapist(@RequestBody TherapistVO therapistVO) {
-        try {
-            TherapistVO response = therapistService.createTherapist(therapistVO);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        TherapistVO response = therapistService.createTherapist(therapistVO);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{therapistId}")
     public ResponseEntity<TherapistVO> updateTherapist(@RequestBody TherapistVO therapist, @PathVariable Long therapistId) {
-        try {
-            TherapistVO response = therapistService.updateTherapist(therapist, therapistId);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        TherapistVO response = therapistService.updateTherapist(therapist, therapistId);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{therapistId}")
     public void deleteTherapist(@PathVariable Long therapistId)  {
-        try {
-            therapistService.deleteTherapistById(therapistId);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        therapistService.deleteTherapistById(therapistId);
     }
 
     @GetMapping("/{therapistId}")
     public ResponseEntity<TherapistVO> getTherapistById(@PathVariable Long therapistId) {
-        try {
-            TherapistVO response = therapistService.getTherapistById(therapistId);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        TherapistVO response = therapistService.getTherapistById(therapistId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/findAll")
     public ResponseEntity<List<TherapistVO>> getAllTherapists() {
-        try {
-            List<TherapistVO> response = therapistService.getAllTherapists();
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            throw new SchedulerException(e.getMessage());
-        }
+        List<TherapistVO> response = therapistService.getAllTherapists();
+        return ResponseEntity.ok(response);
     }
-
-
 
 }
