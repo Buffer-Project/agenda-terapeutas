@@ -1,8 +1,5 @@
 package org.buffer.agendaterapeutas.controller;
 
-import org.buffer.agendaterapeutas.exception.SchedulerException;
-import org.buffer.agendaterapeutas.exception.UserException;
-import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.service.IUserService;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.springframework.http.ResponseEntity;

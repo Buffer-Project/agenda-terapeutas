@@ -1,14 +1,12 @@
 package org.buffer.agendaterapeutas.controller;
 
-import org.buffer.agendaterapeutas.exception.SchedulerException;
 import org.buffer.agendaterapeutas.service.IPatientService;
-import org.buffer.agendaterapeutas.service.impl.PatientServiceImpl;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/v1/patient")
@@ -16,9 +14,10 @@ public class PatientController {
 
     private final IPatientService patientService;
 
-    public PatientController(PatientServiceImpl patientService) {
+    public PatientController(IPatientService patientService) {
         this.patientService = patientService;
     }
+
 
     @PostMapping
     public ResponseEntity<PatientVO> createPatient(@RequestBody PatientVO patientVO) {
@@ -45,8 +44,8 @@ public class PatientController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<PatientVO>> getAllPatients() {
-        List<PatientVO> response = patientService.getAllPatients();
+    public ResponseEntity<List<PatientVO>> getAllActivePatients() {
+        List<PatientVO> response = patientService.getAllActivePatients();
         return ResponseEntity.ok(response);
     }
 }

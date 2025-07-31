@@ -1,10 +1,8 @@
 package org.buffer.agendaterapeutas.service.impl;
 
-import org.buffer.agendaterapeutas.exception.SchedulerException;
 import org.buffer.agendaterapeutas.exception.errors.PatientError;
 import org.buffer.agendaterapeutas.exception.errors.SessionError;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
-import org.buffer.agendaterapeutas.model.bo.SessionBO;
 import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
 import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.entity.Session;
@@ -55,8 +53,7 @@ public class SessionServiceImpl implements ISessionService {
         session.setStatus(SessionStatusEnum.RESERVED);
 
         Session savedSession = sessionRepository.save(session);
-        SessionBO sessionBO = new SessionBO(savedSession);
-        return new SessionVO(sessionBO);
+        return new SessionVO(savedSession);
 
     }
 
@@ -66,8 +63,7 @@ public class SessionServiceImpl implements ISessionService {
         if (session.isEmpty()) {
             throw new SessionException(SessionError.NOT_FOUND, id);
         }
-        SessionBO sessionBO = new SessionBO(session.get());
-        return new SessionVO(sessionBO);
+        return new SessionVO(session.get());
     }
 
     @Override
@@ -85,9 +81,8 @@ public class SessionServiceImpl implements ISessionService {
             throw new SessionException(SessionError.NOT_FOUND, id);
         }
 
-        SessionBO sessionBO = new SessionBO(session);
-        Session updatedSession = sessionRepository.save(new Session(sessionBO));
-        return new SessionVO(new SessionBO(updatedSession));
+        Session updatedSession = sessionRepository.save(new Session(session));
+        return new SessionVO(updatedSession);
     }
 
     @Override
@@ -117,14 +112,14 @@ public class SessionServiceImpl implements ISessionService {
     @Override
     public List<SessionVO> getAllSessions() {
         return sessionRepository.findAll().stream()
-                .map(s -> new SessionVO(new SessionBO(s)))
+                .map(SessionVO::new)
                 .toList();
     }
 
     public List<SessionVO> getSessionsByDateRange(LocalDateTime start, LocalDateTime end) {
         return sessionRepository.findByStartDateTimeBetween(start, end)
                 .stream()
-                .map(s -> new SessionVO(new SessionBO(s)))
+                .map(SessionVO::new)
                 .toList();
     }
 
@@ -132,7 +127,7 @@ public class SessionServiceImpl implements ISessionService {
     public List<SessionVO> getSessionsByTherapistId(Long therapistId) {
         return sessionRepository.findByTherapistId(therapistId)
                 .stream()
-                .map(s -> new SessionVO(new SessionBO(s)))
+                .map(SessionVO::new)
                 .toList();
     }
 

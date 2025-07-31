@@ -2,10 +2,9 @@ package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.TherapistException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
-import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
-import org.buffer.agendaterapeutas.repository.ISessionRepository;
+
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
 import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
@@ -34,11 +33,11 @@ public class TherapistServiceImpl implements ITherapistService {
         user.setLastName(therapistVO.getUser().getLastName());
         user.setUsername(therapistVO.getUser().getUsername());
 
-        therapist.setId(therapistVO.getId());
+        therapist.setId(null);
         therapist.setUser(user);
 
         Therapist savedTherapist = therapistRepository.save(therapist);
-        return new TherapistVO(new TherapistBO(savedTherapist));
+        return new TherapistVO(savedTherapist);
     }
 
     @Override
@@ -56,9 +55,8 @@ public class TherapistServiceImpl implements ITherapistService {
             throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
 
-        TherapistBO therapistBO = new TherapistBO(therapist);
-        Therapist updatedTherapist = therapistRepository.save(new Therapist(therapistBO));
-        return new TherapistVO(new TherapistBO(updatedTherapist));
+        Therapist updatedTherapist = therapistRepository.save(new Therapist(therapist));
+        return new TherapistVO(updatedTherapist);
     }
 
     @Override
@@ -76,15 +74,15 @@ public class TherapistServiceImpl implements ITherapistService {
         if (therapist.isEmpty()) {
             throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
-        TherapistBO therapistBO = new TherapistBO(therapist.get());
-        return new TherapistVO(therapistBO);
+
+        return new TherapistVO(therapist.get());
     }
 
     @Override
     public List<TherapistVO> getAllTherapists() {
         return therapistRepository.findByUserActiveTrue()
                 .stream()
-                .map(t -> new TherapistVO(new TherapistBO(t)))
+                .map(TherapistVO::new)
                 .toList();
     }
 

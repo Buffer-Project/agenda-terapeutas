@@ -5,6 +5,7 @@ import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 import org.buffer.agendaterapeutas.model.entity.Session;
 import org.buffer.agendaterapeutas.model.entity.Specialty;
 
+import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
 
 
@@ -35,6 +36,13 @@ public class TherapistVO {
         this.user = therapistBO.getUser()!= null ? new UserVO(therapistBO.getUser()) : null;
         this.specialty = therapistBO.getSpecialty()== null ? null : new SpecialtyVO(therapistBO.getSpecialty());
         this.sessions = therapistBO.getSessions()!= null ? therapistBO.getSessions().stream().map(SessionVO::new).toList() : null;
+    }
+
+    public TherapistVO(Therapist therapist) {
+        this.id = therapist.getId();
+        this.user = therapist.getUser() != null ? new UserVO(therapist.getUser()) : null;
+        this.specialty = therapist.getSpecialty() != null ? new SpecialtyVO(therapist.getSpecialty()) : null;
+        this.sessions = therapist.getSessions() != null ? therapist.getSessions().stream().map(SessionVO::new).toList() : null;
     }
 
     public Long getId() {

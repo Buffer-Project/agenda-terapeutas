@@ -1,6 +1,7 @@
 package org.buffer.agendaterapeutas.model.vo;
 
 import org.buffer.agendaterapeutas.model.bo.SpecialtyBO;
+import org.buffer.agendaterapeutas.model.entity.Specialty;
 
 public class SpecialtyVO {
 
@@ -18,6 +19,11 @@ public class SpecialtyVO {
     public SpecialtyVO(SpecialtyBO specialtyBO) {
         this.id = specialtyBO.getId();
         this.name = specialtyBO.getName();
+    }
+
+    public SpecialtyVO(Specialty specialty) {
+        this.id = specialty.getId();
+        this.name = specialty.getName();
     }
 
     public Long getId() {
