@@ -2,7 +2,6 @@ package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.TherapistException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
-import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
 
@@ -34,7 +33,7 @@ public class TherapistServiceImpl implements ITherapistService {
         user.setLastName(therapistVO.getUser().getLastName());
         user.setUsername(therapistVO.getUser().getUsername());
 
-        therapist.setId(therapistVO.getId());
+        therapist.setId(null);
         therapist.setUser(user);
 
         Therapist savedTherapist = therapistRepository.save(therapist);
