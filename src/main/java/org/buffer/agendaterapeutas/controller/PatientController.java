@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.controller;
 
 import org.buffer.agendaterapeutas.service.IPatientService;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +19,10 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-
     @PostMapping
     public ResponseEntity<PatientVO> createPatient(@RequestBody PatientVO patientVO) {
         PatientVO response = patientService.createPatient(patientVO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
