@@ -9,5 +9,5 @@ public interface IPatientService {
     PatientVO getPatientById(Long id);
     PatientVO updatePatient(PatientVO patient,Long id);
     void deletePatientById(Long id);
-    List<PatientVO> getAllPatients();
+    List<PatientVO> getAllActivePatients();
 }

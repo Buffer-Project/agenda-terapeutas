@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.model.entity;
 
 import jakarta.persistence.*;
 import org.buffer.agendaterapeutas.model.bo.PatientBO;
+import org.buffer.agendaterapeutas.model.vo.PatientVO;
 
 @Entity(name = "patient")
 public class Patient {
@@ -26,6 +27,12 @@ public class Patient {
         this.id = patientBO.getId();
         this.user = patientBO.getUser() != null ? new User(patientBO.getUser()) : null;
         this.healthInsurance = patientBO.getHealthInsurance();
+    }
+
+    public Patient(PatientVO patientVO) {
+        this.id = patientVO.getId();
+        this.user = patientVO.getUser() != null ? new User(patientVO.getUser()) : null;
+        this.healthInsurance = patientVO.getHealthInsurance();
     }
 
 

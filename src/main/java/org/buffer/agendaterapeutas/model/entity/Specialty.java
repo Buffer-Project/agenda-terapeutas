@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.model.entity;
 
 import jakarta.persistence.*;
 import org.buffer.agendaterapeutas.model.bo.SpecialtyBO;
+import org.buffer.agendaterapeutas.model.vo.SpecialtyVO;
 
 @Entity
 public class Specialty {
@@ -21,6 +22,11 @@ public class Specialty {
     public Specialty(SpecialtyBO specialtyBO) {
         this.id = specialtyBO.getId();
         this.name = specialtyBO.getName();
+    }
+
+    public Specialty(SpecialtyVO specialtyVO) {
+        this.id = specialtyVO.getId();
+        this.name = specialtyVO.getName();
     }
 
     public Long getId() {

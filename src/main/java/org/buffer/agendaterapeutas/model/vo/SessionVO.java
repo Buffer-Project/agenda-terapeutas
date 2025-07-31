@@ -2,6 +2,8 @@ package org.buffer.agendaterapeutas.model.vo;
 
 import org.buffer.agendaterapeutas.model.bo.SessionBO;
 import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
+import org.buffer.agendaterapeutas.model.entity.Session;
+
 import java.time.LocalDateTime;
 
 public class SessionVO {
@@ -34,6 +36,17 @@ public class SessionVO {
             this.startDateTime = sessionBO.getStartDateTime();
             this.endDateTime = sessionBO.getEndDateTime();
             this.status = sessionBO.getStatus();
+        }
+    }
+
+    public SessionVO(Session session) {
+        if (session != null) {
+            this.idSession = session.getIdSession();
+            this.therapist = session.getTherapist() != null ? new TherapistVO(session.getTherapist()) : null;
+            this.patient = session.getPatient() != null ? new PatientVO(session.getPatient()) : null;
+            this.startDateTime = session.getStartDateTime();
+            this.endDateTime = session.getEndDateTime();
+            this.status = session.getStatus();
         }
     }
 

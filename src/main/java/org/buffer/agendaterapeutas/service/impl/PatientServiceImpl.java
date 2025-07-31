@@ -29,8 +29,8 @@ public class PatientServiceImpl implements IPatientService {
         if (patientRepository.existsByUserEmail(patientVO.getUser().getEmail())) {
             throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
         }
-        Patient patient = patientRepository.save(new Patient(new PatientBO(patientVO)));
-        return new PatientVO(new PatientBO(patient));
+        Patient patient = patientRepository.save(new Patient(patientVO));
+        return new PatientVO(patient);
     }
 
     @Override
@@ -39,8 +39,7 @@ public class PatientServiceImpl implements IPatientService {
         if (patient.isEmpty()) {
             throw new PatientException(PatientError.NOT_FOUND, id);
         }
-        PatientBO patientBO = new PatientBO(patient.get());
-        return new PatientVO(patientBO);
+        return new PatientVO(patient.get());
     }
 
     @Override
@@ -54,10 +53,9 @@ public class PatientServiceImpl implements IPatientService {
         if (patient.getId() == null || !patientRepository.existsById(patient.getId())) {
             throw new PatientException(PatientError.NOT_FOUND, id);
         }
-        PatientBO patientBO = new PatientBO(patient);
-        Patient updatedPatient = patientRepository.save(new Patient(patientBO));
-        return new PatientVO(new PatientBO(updatedPatient));
 
+        Patient updatedPatient = patientRepository.save(new Patient(patient));
+        return new PatientVO(updatedPatient);
     }
 
     public void deletePatientById(Long id) {
@@ -68,10 +66,10 @@ public class PatientServiceImpl implements IPatientService {
         patientRepository.delete(patient.get());
     }
 
-    public List<PatientVO> getAllPatients() {
+    public List<PatientVO> getAllActivePatients() {
         return patientRepository.findByUserActiveTrue()
                 .stream()
-                .map(p -> new PatientVO(new PatientBO(p)))
+                .map(PatientVO::new)
                 .toList();
     }
 }

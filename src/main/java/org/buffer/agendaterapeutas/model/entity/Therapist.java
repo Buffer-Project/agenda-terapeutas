@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.model.entity;
 
 import jakarta.persistence.*;
 import org.buffer.agendaterapeutas.model.bo.TherapistBO;
+import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.hibernate.annotations.Cascade;
 
 import java.util.List;
@@ -37,6 +38,13 @@ public class Therapist {
         this.user = therapistBO.getUser() != null ? new User(therapistBO.getUser()) : null;
         this.specialty = therapistBO.getSpecialty() != null ? new Specialty(therapistBO.getSpecialty()) : null;
         this.sessions = therapistBO.getSessions() != null ? therapistBO.getSessions().stream().map(Session::new).toList() : null;
+    }
+
+    public Therapist(TherapistVO therapistVO) {
+        this.id = therapistVO.getId();
+        this.user = therapistVO.getUser() != null ? new User(therapistVO.getUser()) : null;
+        this.specialty = therapistVO.getSpecialty() != null ? new Specialty(therapistVO.getSpecialty()) : null;
+        this.sessions = therapistVO.getSessions() != null ? therapistVO.getSessions().stream().map(Session::new).toList() : null;
     }
 
     public Long getId() {
