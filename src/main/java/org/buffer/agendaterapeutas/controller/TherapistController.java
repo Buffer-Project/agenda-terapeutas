@@ -1,16 +1,11 @@
 package org.buffer.agendaterapeutas.controller;
 
-import org.buffer.agendaterapeutas.exception.SchedulerException;
-import org.buffer.agendaterapeutas.model.entity.Session;
-import org.buffer.agendaterapeutas.model.entity.Therapist;
-import org.buffer.agendaterapeutas.model.vo.SessionVO;
 import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/therapist")

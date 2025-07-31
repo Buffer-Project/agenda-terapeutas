@@ -1,6 +1,7 @@
 package org.buffer.agendaterapeutas.model.vo;
 
 import org.buffer.agendaterapeutas.model.bo.PatientBO;
+import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.entity.User;
 
 public class PatientVO {
@@ -22,6 +23,12 @@ public class PatientVO {
         this.id = patientBO.getId();
         this.user = patientBO.getUser()!=null?new UserVO(patientBO.getUser()):null;
         this.healthInsurance = patientBO.getHealthInsurance();
+    }
+
+    public PatientVO(Patient patient) {
+        this.id = patient.getId();
+        this.user = patient.getUser()!=null?new UserVO(patient.getUser()):null;
+        this.healthInsurance = patient.getHealthInsurance();
     }
 
     public Long getId() {

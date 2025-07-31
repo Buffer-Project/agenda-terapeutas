@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.model.vo;
 
 
 import org.buffer.agendaterapeutas.model.bo.UserBO;
+import org.buffer.agendaterapeutas.model.entity.User;
 
 public class UserVO {
     private Long id;
@@ -32,6 +33,18 @@ public class UserVO {
     }
 
     public UserVO(UserBO user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.email = user.getEmail();
+        this.phone = user.getPhone();
+        this.gender = user.getGender();
+        this.birthDate = user.getBirthDate();
+    }
+
+    public UserVO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();

@@ -28,8 +28,7 @@ public class UserServiceImpl implements IUserService {
             throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
         }
         User savedUser = userRepository.save(new User(new UserBO(user)));
-        UserBO userBO = new UserBO(savedUser);
-        return new UserVO(userBO);
+        return new UserVO(savedUser);
 
     }
 
@@ -39,9 +38,7 @@ public class UserServiceImpl implements IUserService {
         if (user.isEmpty()) {
             throw new UserException(UserError.NOT_FOUND);
         }
-        UserBO userBO = new UserBO(user.get());
-        return new UserVO(userBO);
+        return new UserVO(user.get());
     }
-
 
 }

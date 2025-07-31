@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.model.entity;
 
 import jakarta.persistence.*;
 import org.buffer.agendaterapeutas.model.bo.UserBO;
+import org.buffer.agendaterapeutas.model.vo.UserVO;
 
 @Entity (name = "users")
 public class User {
@@ -45,6 +46,18 @@ public class User {
         this.phone = userBO.getPhone();
         this.gender = userBO.getGender();
         this.birthDate = userBO.getBirthDate();
+    }
+
+    public User(UserVO userVO) {
+        this.id = userVO.getId();
+        this.username = userVO.getUsername();
+        this.password = userVO.getPassword();
+        this.firstName = userVO.getFirstName();
+        this.lastName = userVO.getLastName();
+        this.email = userVO.getEmail();
+        this.phone = userVO.getPhone();
+        this.gender = userVO.getGender();
+        this.birthDate = userVO.getBirthDate();
     }
 
     public Long getId() {
