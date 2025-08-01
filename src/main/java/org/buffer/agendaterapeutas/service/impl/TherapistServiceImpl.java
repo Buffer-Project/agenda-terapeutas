@@ -65,6 +65,7 @@ public class TherapistServiceImpl implements ITherapistService {
         if (therapist.isEmpty()) {
             throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
+
         therapistRepository.deleteById(id);
     }
 
@@ -80,7 +81,7 @@ public class TherapistServiceImpl implements ITherapistService {
 
     @Override
     public List<TherapistVO> getAllTherapists() {
-        return therapistRepository.findByUserActiveTrue()
+        return therapistRepository.findAll()
                 .stream()
                 .map(TherapistVO::new)
                 .toList();
