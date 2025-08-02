@@ -97,7 +97,7 @@ public class TherapistServiceTests {
         });
 
         assert (result.getCode() == TherapistError.MISSING_ID.getCode());
-
+        assert(result.getClass().equals(TherapistException.class));
 
     }
 
@@ -114,6 +114,7 @@ public class TherapistServiceTests {
         });
 
         assert (result.getCode() == TherapistError.MISSING_ID.getCode());
+        assert(result.getClass().equals(TherapistException.class));
 
     }
 
@@ -128,6 +129,7 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.ID_CONFLICT.getCode());
+        assert(result.getClass().equals(TherapistException.class));
 
     }
 
@@ -142,6 +144,7 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
+        assert(result.getClass().equals(TherapistException.class));
         verify(therapistRepository).existsById(id);
     }
 
@@ -173,6 +176,7 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
+        assert(result.getClass().equals(TherapistException.class));
         verify(therapistRepository, times(1)).findById(id);
 
 
@@ -204,6 +208,7 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
+        assert(result.getClass().equals(TherapistException.class));
         verify(therapistRepository, times(1)).findById(id);
 
     }

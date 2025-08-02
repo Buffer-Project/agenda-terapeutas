@@ -1,0 +1,66 @@
+package org.buffer.agendaterapeutas.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.buffer.agendaterapeutas.model.entity.Therapist;
+import org.buffer.agendaterapeutas.model.vo.TherapistVO;
+import org.buffer.agendaterapeutas.service.IPatientService;
+import org.buffer.agendaterapeutas.service.ITherapistService;
+import org.buffer.agendaterapeutas.service.impl.TherapistServiceImpl;
+import org.junit.jupiter.api.BeforeAll;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+
+public class TherapistControllerTests {
+
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
+    private MockMvc mockMvc;
+
+    private final TherapistServiceImpl therapistService = mock(TherapistServiceImpl.class);
+
+    @BeforeEach
+    void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new TherapistController(therapistService)).build();
+    }
+
+
+    @Test
+    void createTherapistTest() throws Exception {
+        TherapistVO therapistVO = mock(TherapistVO.class);
+
+        when(therapistService.createTherapist(any())).thenReturn(therapistVO);
+
+        mockMvc.perform(post("/api/v1/therapist")
+                .content(objectMapper.writeValueAsString(therapistVO))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isCreated(),
+                content().json(objectMapper.writeValueAsString(therapistVO))
+        );
+        verify(therapistService).createTherapist(any(TherapistVO.class));
+    }
+
+
+}

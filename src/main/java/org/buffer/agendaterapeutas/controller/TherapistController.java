@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.controller;
 
 import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class TherapistController {
     @PostMapping
     public ResponseEntity<TherapistVO> createTherapist(@RequestBody TherapistVO therapistVO) {
         TherapistVO response = therapistService.createTherapist(therapistVO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{therapistId}")
@@ -30,7 +31,7 @@ public class TherapistController {
     }
 
     @DeleteMapping("/{therapistId}")
-    public void deleteTherapist(@PathVariable Long therapistId)  {
+    public void deleteTherapist(@PathVariable Long therapistId) {
         therapistService.deleteTherapistById(therapistId);
     }
 

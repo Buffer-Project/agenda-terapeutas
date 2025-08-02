@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 public enum TherapistError implements SchedulerError{
     NOT_FOUND(3001, HttpStatus.NOT_FOUND, "Therapist %s not found"),
     MISSING_ID(3002, HttpStatus.BAD_REQUEST, "Missing required field: id"),
-    ID_CONFLICT(3003, HttpStatus.BAD_REQUEST, "Provided ids don't match");
+    ID_CONFLICT(3003, HttpStatus.BAD_REQUEST, "Provided ids don't match"),
+    EMPTY_USER(3004, HttpStatus.BAD_REQUEST, "Therapist must have a user");
 
     private final int code;
     private final HttpStatus httpStatus;
