@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.controller;
 
 import org.buffer.agendaterapeutas.service.IUserService;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserVO> createUser(@RequestBody UserVO user) {
         UserVO response = userService.createUser(user);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping
