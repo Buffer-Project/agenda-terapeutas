@@ -34,6 +34,11 @@ public class TherapistServiceImpl implements ITherapistService {
         user.setUsername(therapistVO.getUser().getUsername());
 
         therapist.setId(null);
+
+        if (therapistVO.getId() == null) {
+            throw new TherapistException(TherapistError.EMPTY_USER);
+        }
+
         therapist.setUser(user);
 
         Therapist savedTherapist = therapistRepository.save(therapist);
@@ -65,6 +70,7 @@ public class TherapistServiceImpl implements ITherapistService {
         if (therapist.isEmpty()) {
             throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
+
         therapistRepository.deleteById(id);
     }
 
@@ -80,7 +86,7 @@ public class TherapistServiceImpl implements ITherapistService {
 
     @Override
     public List<TherapistVO> getAllTherapists() {
-        return therapistRepository.findByUserActiveTrue()
+        return therapistRepository.findAll()
                 .stream()
                 .map(TherapistVO::new)
                 .toList();
