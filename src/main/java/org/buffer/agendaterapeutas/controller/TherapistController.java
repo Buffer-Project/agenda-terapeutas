@@ -31,8 +31,9 @@ public class TherapistController {
     }
 
     @DeleteMapping("/{therapistId}")
-    public void deleteTherapist(@PathVariable Long therapistId) {
+    public ResponseEntity<Void> deleteTherapist(@PathVariable Long therapistId) {
         therapistService.deleteTherapistById(therapistId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/{therapistId}")
