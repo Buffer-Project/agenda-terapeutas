@@ -34,9 +34,11 @@ public class TherapistServiceImpl implements ITherapistService {
         user.setUsername(therapistVO.getUser().getUsername());
 
         therapist.setId(null);
+
         if (therapistVO.getId() == null) {
             throw new TherapistException(TherapistError.EMPTY_USER);
         }
+
         therapist.setUser(user);
 
         Therapist savedTherapist = therapistRepository.save(therapist);

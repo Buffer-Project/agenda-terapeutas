@@ -1,10 +1,12 @@
 package org.buffer.agendaterapeutas.service;
 
+
 import org.buffer.agendaterapeutas.exception.TherapistException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.vo.SpecialtyVO;
+
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
@@ -16,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +26,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class TherapistServiceTests {
@@ -38,9 +42,11 @@ public class TherapistServiceTests {
         TherapistVO therapist = new TherapistVO();
         therapist.setId(1L);
         therapist.setUser(new UserVO());
+
         therapist.getUser().setFirstName("John");
         therapist.getUser().setLastName("Doe");
         therapist.setSpecialty(new SpecialtyVO(1L, "Cardiology"));
+
         return therapist;
     }
 
@@ -52,6 +58,7 @@ public class TherapistServiceTests {
 
     @Test
     void createTherapistTest() {
+
         TherapistVO therapist = getMockTherapistVO();
         Therapist therapistEntity = new Therapist(new TherapistBO(therapist));
         therapistEntity.setId(1L);
@@ -60,7 +67,9 @@ public class TherapistServiceTests {
         TherapistVO result = therapistService.createTherapist(therapist);
 
         assert (result.getId().equals(1L));
+
         verify(therapistRepository, times(1)).save(any(Therapist.class));
+
 
     }
 
@@ -99,6 +108,7 @@ public class TherapistServiceTests {
         assert (result.getCode() == TherapistError.MISSING_ID.getCode());
         assert(result.getClass().equals(TherapistException.class));
 
+
     }
 
     @Test
@@ -116,9 +126,11 @@ public class TherapistServiceTests {
         assert (result.getCode() == TherapistError.MISSING_ID.getCode());
         assert(result.getClass().equals(TherapistException.class));
 
+
     }
 
     @Test
+
     void updateTherapistTestWhenProvidedIdDoesNotEqualProvidedTherapistIdTest() {
         Long id = 700L;
         TherapistVO therapistVO = getMockTherapistVO();
@@ -163,6 +175,7 @@ public class TherapistServiceTests {
         verify(therapistRepository, times(1)).findById(id);
         verify(therapistRepository, times(1)).deleteById(id);
 
+
     }
 
     @Test
@@ -180,6 +193,7 @@ public class TherapistServiceTests {
         verify(therapistRepository, times(1)).findById(id);
 
 
+
     }
 
     @Test
@@ -194,6 +208,7 @@ public class TherapistServiceTests {
 
         assertEquals("John", result.getUser().getFirstName());
         verify(therapistRepository, times(1)).findById(id);
+
 
     }
 
@@ -210,6 +225,7 @@ public class TherapistServiceTests {
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
         assert(result.getClass().equals(TherapistException.class));
         verify(therapistRepository, times(1)).findById(id);
+
 
     }
 
@@ -228,6 +244,7 @@ public class TherapistServiceTests {
         assertEquals(3, result.size());
 
         verify(therapistRepository, times(1)).findAll();
+
 
 
     }
