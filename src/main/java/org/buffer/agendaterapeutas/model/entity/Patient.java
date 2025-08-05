@@ -7,6 +7,7 @@ import org.buffer.agendaterapeutas.model.vo.PatientVO;
 @Entity(name = "patient")
 public class Patient {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public class SessionBO {
 
-    private Long idSession;
+    private Long id;
     private TherapistBO therapist;
     private PatientBO patient;
     private LocalDateTime startDateTime;
@@ -17,8 +17,8 @@ public class SessionBO {
     public SessionBO() {
     }
 
-    public SessionBO(Long idSession, TherapistBO therapist, PatientBO patient, LocalDateTime startDateTime, LocalDateTime endDateTime, SessionStatusEnum status) {
-        this.idSession = idSession;
+    public SessionBO(Long id, TherapistBO therapist, PatientBO patient, LocalDateTime startDateTime, LocalDateTime endDateTime, SessionStatusEnum status) {
+        this.id = id;
         this.therapist = therapist;
         this.patient = patient;
         this.startDateTime = startDateTime;
@@ -28,7 +28,7 @@ public class SessionBO {
 
     public SessionBO(Session session) {
         if (session != null) {
-            this.idSession = session.getIdSession();
+            this.id = session.getId();
             this.therapist = session.getTherapist() != null ? new TherapistBO(session.getTherapist()) : null;
             this.patient = session.getPatient() != null ? new PatientBO(session.getPatient()) : null;
             this.startDateTime = session.getStartDateTime();
@@ -39,7 +39,7 @@ public class SessionBO {
 
     public SessionBO(SessionVO sessionVO) {
         if (sessionVO != null) {
-            this.idSession = sessionVO.getIdSession();
+            this.id = sessionVO.getId();
             this.therapist = sessionVO.getTherapist() != null ? new TherapistBO(sessionVO.getTherapist()) : null;
             this.patient = sessionVO.getPatient() != null ? new PatientBO(sessionVO.getPatient()) : null;
             this.startDateTime = sessionVO.getStartDateTime();
@@ -49,12 +49,12 @@ public class SessionBO {
     }
 
 
-    public Long getIdSession() {
-        return idSession;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdSession(Long idSession) {
-        this.idSession = idSession;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public TherapistBO getTherapist() {

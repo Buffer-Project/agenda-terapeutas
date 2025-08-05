@@ -33,9 +33,9 @@ public class TherapistServiceImpl implements ITherapistService {
         user.setLastName(therapistVO.getUser().getLastName());
         user.setUsername(therapistVO.getUser().getUsername());
 
-        therapist.setId(null);
+        therapist.setSpecialty(therapistVO.getSpecialty());
 
-        if (therapistVO.getId() == null) {
+        if (therapistVO.getUser() == null || therapistVO.getUser().getId() == null) {
             throw new TherapistException(TherapistError.EMPTY_USER);
         }
 

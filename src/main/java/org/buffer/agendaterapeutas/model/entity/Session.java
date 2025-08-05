@@ -12,7 +12,7 @@ public class Session {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSession;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "id_therapist")
@@ -42,7 +42,7 @@ public class Session {
 
     public Session(SessionBO sessionBO) {
         if (sessionBO != null) {
-            this.idSession = sessionBO.getIdSession();
+            this.id = sessionBO.getId();
             this.therapist = sessionBO.getTherapist() != null ? new Therapist(sessionBO.getTherapist()) : null;
             this.patient = sessionBO.getPatient() != null ? new Patient(sessionBO.getPatient()) : null;
             this.startDateTime = sessionBO.getStartDateTime();
@@ -53,7 +53,7 @@ public class Session {
 
     public Session(SessionVO sessionVO) {
         if (sessionVO != null) {
-            this.idSession = sessionVO.getIdSession();
+            this.id = sessionVO.getId();
             this.therapist = sessionVO.getTherapist() != null ? new Therapist(sessionVO.getTherapist()) : null;
             this.patient = sessionVO.getPatient() != null ? new Patient(sessionVO.getPatient()) : null;
             this.startDateTime = sessionVO.getStartDateTime();
@@ -63,12 +63,12 @@ public class Session {
     }
 
 
-    public Long getIdSession() {
-        return idSession;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdSession(Long idSession) {
-        this.idSession = idSession;
+    public void setId(Long idSession) {
+        this.id = idSession;
     }
 
     public Therapist getTherapist() {
