@@ -70,8 +70,7 @@ class UserControllerTests {
 
     @Test
     void updateUserTest() {
-        //TODO: HACERLO
-        gggg
+      //TODO: implement
     }
 
 

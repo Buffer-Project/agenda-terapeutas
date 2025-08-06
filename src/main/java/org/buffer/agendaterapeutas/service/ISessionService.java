@@ -1,5 +1,8 @@
 package org.buffer.agendaterapeutas.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.buffer.agendaterapeutas.model.vo.SessionVO;
 
 import java.time.LocalDateTime;
@@ -18,7 +21,7 @@ public interface ISessionService {
 
     void deleteSession(Long id);
 
-    void cancelSession(Long id);
+    void cancelSession(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException;
 
     List<SessionVO> getSessionsByTherapistId(Long therapistId);
 

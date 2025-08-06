@@ -1,5 +1,10 @@
 package org.buffer.agendaterapeutas.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.buffer.agendaterapeutas.exception.errors.PatientError;
 import org.buffer.agendaterapeutas.exception.errors.SessionError;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
@@ -27,6 +32,7 @@ public class SessionServiceImpl implements ISessionService {
     private final ISessionRepository sessionRepository;
     private final IPatientRepository patientRepository;
     private final ITherapistRepository therapistRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
 
     public SessionServiceImpl(ISessionRepository sessionRepository, IPatientRepository patientRepository, ITherapistRepository therapistRepository) {
@@ -94,14 +100,15 @@ public class SessionServiceImpl implements ISessionService {
     }
 
     @Override
-    public void cancelSession(Long id) {
+    public void cancelSession(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
         Optional<Session> session = sessionRepository.findById(id);
         if (session.isEmpty()) {
             throw new SessionException(SessionError.NOT_FOUND);
         }
         if (session.get().getStartDateTime().isAfter(LocalDateTime.now())) {
-            session.get().setStatus(SessionStatusEnum.CANCELLED);
-            sessionRepository.save(session.get());
+            JsonNode patched = patch.apply(objectMapper.convertValue(session, JsonNode.class));
+            Session updatedSession = objectMapper.treeToValue(patched, Session.class);
+            sessionRepository.save(updatedSession);
         } else {
             throw new SessionException(SessionError.CANNOT_CANCEL_PAST_SESSION);
         }

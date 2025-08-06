@@ -1,5 +1,8 @@
 package org.buffer.agendaterapeutas.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.model.vo.SessionVO;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +45,10 @@ public class SessionController {
         return ResponseEntity.ok().build();
     }
 
-    //TODO: delete, use update instead
-    @DeleteMapping("/{id}/cancel")
-    public ResponseEntity<Void> cancelSession(@PathVariable Long id) {
-        sessionService.cancelSession(id);
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelSession(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+        sessionService.cancelSession(id, patch);
         return ResponseEntity.ok().build();
     }
 

@@ -25,7 +25,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserVO> updateUser(@RequestBody UserVO user, @PathVariable Long userId) {
         UserVO response = userService.updateUser(user, userId);
-        return null;
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping
