@@ -66,8 +66,12 @@ class UserControllerTests {
                 content().json(objectMapper.writeValueAsString(userVO)));
 
         verify(userService).getUserById(id);
+    }
 
-
+    @Test
+    void updateUserTest() {
+        //TODO: HACERLO
+        gggg
     }
 
 

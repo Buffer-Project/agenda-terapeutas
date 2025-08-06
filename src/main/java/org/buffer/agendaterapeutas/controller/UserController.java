@@ -22,14 +22,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping
-    public ResponseEntity<UserVO> updateUser(UserVO user) {
-        // TODO
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserVO> updateUser(@RequestBody UserVO user, @PathVariable Long userId) {
+        UserVO response = userService.updateUser(user, userId);
         return null;
     }
 
     @DeleteMapping
-    public void deleteUser(UserVO user) {
+    public void deleteUser(Long id) {
         // TODO
 
     }

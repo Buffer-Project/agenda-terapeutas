@@ -43,7 +43,7 @@ public class SessionController {
     }
 
     //TODO: delete, use update instead
-    @DeleteMapping("/cancelReservation/{id}")
+    @DeleteMapping("/{id}/cancel")
     public ResponseEntity<Void> cancelSession(@PathVariable Long id) {
         sessionService.cancelSession(id);
         return ResponseEntity.ok().build();
@@ -65,7 +65,7 @@ public class SessionController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{therapistId}")
+    @GetMapping("/therapist/{therapistId}")
     public ResponseEntity<List<SessionVO>> getSessionsByTherapist(@PathVariable Long therapistId) {
         List<SessionVO> response = sessionService.getSessionsByTherapistId(therapistId);
         return ResponseEntity.ok(response);

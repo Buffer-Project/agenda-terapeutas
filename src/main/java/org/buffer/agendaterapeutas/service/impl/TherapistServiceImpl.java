@@ -71,7 +71,9 @@ public class TherapistServiceImpl implements ITherapistService {
             throw new TherapistException(TherapistError.NOT_FOUND, id);
         }
 
-        therapistRepository.deleteById(id);
+        therapist.get().getUser().setActive(false);
+
+        therapistRepository.save(therapist.get());
     }
 
     @Override

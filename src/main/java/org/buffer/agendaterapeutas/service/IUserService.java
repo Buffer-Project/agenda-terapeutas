@@ -5,5 +5,10 @@ import org.buffer.agendaterapeutas.model.vo.UserVO;
 
 public interface IUserService {
     UserVO createUser(UserVO user);
-    UserVO getUserById(Long id) ;
+
+    UserVO getUserById(Long id);
+
+    UserVO updateUser(UserVO user, Long id);
+
+    void deleteUser(Long id);
 }
