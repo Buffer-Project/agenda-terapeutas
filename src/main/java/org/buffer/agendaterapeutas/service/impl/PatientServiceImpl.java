@@ -1,14 +1,13 @@
 package org.buffer.agendaterapeutas.service.impl;
 
-import org.buffer.agendaterapeutas.exception.UserException;
-import org.buffer.agendaterapeutas.exception.errors.PatientError;
-import org.buffer.agendaterapeutas.exception.errors.UserError;
-import org.buffer.agendaterapeutas.model.bo.PatientBO;
 import org.buffer.agendaterapeutas.exception.PatientException;
+import org.buffer.agendaterapeutas.exception.errors.PatientError;
 import org.buffer.agendaterapeutas.model.entity.Patient;
+import org.buffer.agendaterapeutas.model.vo.PatientVO;
+import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.IPatientRepository;
 import org.buffer.agendaterapeutas.service.IPatientService;
-import org.buffer.agendaterapeutas.model.vo.PatientVO;
+import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,17 +17,23 @@ import java.util.Optional;
 public class PatientServiceImpl implements IPatientService {
 
     private final IPatientRepository patientRepository;
+    private final IUserService userService;
 
-    public PatientServiceImpl(IPatientRepository patientRepository) {
+    public PatientServiceImpl(IPatientRepository patientRepository, IUserService userService) {
         this.patientRepository = patientRepository;
+        this.userService = userService;
     }
 
     @Override
     public PatientVO createPatient(PatientVO patientVO) {
 
-        if (patientRepository.existsByUserEmail(patientVO.getUser().getEmail())) {
-            throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
+        Long userId = patientVO.getUser().getId();
+        UserVO user = userService.getUserById(userId);
+
+        if(user== null){
+            throw new PatientException(PatientError.NOT_FOUND, userId);
         }
+        patientVO.setUser(user);
         Patient patient = patientRepository.save(new Patient(patientVO));
         return new PatientVO(patient);
     }

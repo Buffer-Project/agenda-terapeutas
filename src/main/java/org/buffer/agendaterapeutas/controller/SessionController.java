@@ -3,13 +3,13 @@ package org.buffer.agendaterapeutas.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.model.vo.SessionVO;
+import org.buffer.agendaterapeutas.service.ISessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/session")
@@ -46,25 +46,15 @@ public class SessionController {
     }
 
 
-    @PatchMapping("/{id}/cancel")
-    public ResponseEntity<Void> cancelSession(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-        sessionService.cancelSession(id, patch);
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateSessionValue(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+        sessionService.updateSessionValue(id, patch);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<SessionVO>> getAllSessions() {
-        List<SessionVO> response = sessionService.getAllSessions();
-        return ResponseEntity.ok(response);
-    }
-
-    //TODO: Move to get all with optional query params
-    @GetMapping("/range")
-    public ResponseEntity<List<SessionVO>> getSessionsByDateRange(
-            @RequestParam LocalDateTime startDate,
-            @RequestParam LocalDateTime endDate
-    ) {
-        List<SessionVO> response = sessionService.getSessionsByDateRange(startDate, endDate);
+    @GetMapping
+    public ResponseEntity<List<SessionVO>> getAllSessions(@RequestParam Map<String, String> params) {
+        List<SessionVO> response = sessionService.getAllSessions(params);
         return ResponseEntity.ok(response);
     }
 

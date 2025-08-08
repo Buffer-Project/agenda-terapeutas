@@ -11,8 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,8 +68,24 @@ class UserControllerTests {
     }
 
     @Test
-    void updateUserTest() {
-      //TODO: implement
+    void updateUserTest() throws Exception {
+        Long id = 23L;
+        UserVO userVO = mock(UserVO.class);
+
+        when((userService.updateUser(any(UserVO.class), any(Long.class)))).thenReturn(userVO);
+
+        mockMvc.perform(
+                put("/api/v1/user/" + id)
+                        .content(objectMapper.writeValueAsString(userVO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk(),
+                content().json(objectMapper.writeValueAsString(userVO))
+        );
+
+        verify(userService).updateUser(any(UserVO.class), any(Long.class));
+
     }
 
 

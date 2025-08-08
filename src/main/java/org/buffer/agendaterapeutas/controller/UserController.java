@@ -29,12 +29,12 @@ public class UserController {
     }
 
     @DeleteMapping
-    public void deleteUser(Long id) {
-        // TODO
-
+    public ResponseEntity<Void> deleteUser(Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{userId}")  //api/v1/user/358
+    @GetMapping("/{userId}")
     public ResponseEntity<UserVO> getUserById(@PathVariable Long userId) {
         UserVO response = userService.getUserById(userId);
         return ResponseEntity.ok(response);

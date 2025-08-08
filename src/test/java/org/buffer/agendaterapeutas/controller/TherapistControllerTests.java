@@ -62,11 +62,13 @@ class TherapistControllerTests {
 
         when(therapistService.updateTherapist(any(TherapistVO.class), any(Long.class))).thenReturn(therapistVO);
 
-        mockMvc.perform(put("/api/v1/therapist/" + id)
+        mockMvc.perform(
+                put("/api/v1/therapist/" + id)
                 .content(objectMapper.writeValueAsString(therapistVO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-        ).andExpectAll(
+        )
+                .andExpectAll(
                 status().isOk(),
                 content().json(objectMapper.writeValueAsString(therapistVO))
         );
