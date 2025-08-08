@@ -71,8 +71,9 @@ public class UserServiceImpl implements IUserService {
         if (user.isEmpty()) {
             throw new UserException(UserError.NOT_FOUND);
         }
-        user.get().setActive(false);
-        userRepository.save(user.get());
+        User userToSoftDelete = user.get();
+        userToSoftDelete.setActive(false);
+        userRepository.save(userToSoftDelete);
     }
 
     @Override

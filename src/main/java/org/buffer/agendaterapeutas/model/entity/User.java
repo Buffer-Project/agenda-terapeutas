@@ -4,10 +4,10 @@ import jakarta.persistence.*;
 import org.buffer.agendaterapeutas.model.bo.UserBO;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
 
-@Entity (name = "users")
+@Entity(name = "users")
 public class User {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
@@ -17,15 +17,13 @@ public class User {
     private String phone;
     private String gender;
     private int birthDate;
+    private boolean active;
 
-    /*attribute for a soft delete*/
-    private boolean active = true;
-
-    public User(){
+    public User() {
 
     }
 
-    public User(String username, String password, String firstName, String lastName, String email, String phone, String gender, int birthDate) {
+    public User(String username, String password, String firstName, String lastName, String email, String phone, String gender, int birthDate, boolean active) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -34,6 +32,7 @@ public class User {
         this.phone = phone;
         this.gender = gender;
         this.birthDate = birthDate;
+        this.active = active;
     }
 
     public User(UserBO userBO) {
@@ -46,6 +45,7 @@ public class User {
         this.phone = userBO.getPhone();
         this.gender = userBO.getGender();
         this.birthDate = userBO.getBirthDate();
+        this.active = userBO.isActive();
     }
 
     public User(UserVO userVO) {
@@ -58,6 +58,7 @@ public class User {
         this.phone = userVO.getPhone();
         this.gender = userVO.getGender();
         this.birthDate = userVO.getBirthDate();
+        this.active = userVO.isActive();
     }
 
     public Long getId() {
