@@ -27,7 +27,7 @@ public class TherapistController {
     @PutMapping("/{therapistId}")
     public ResponseEntity<TherapistVO> updateTherapist(@RequestBody TherapistVO therapist, @PathVariable Long therapistId) {
         TherapistVO response = therapistService.updateTherapist(therapist, therapistId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{therapistId}")
@@ -39,13 +39,13 @@ public class TherapistController {
     @GetMapping("/{therapistId}")
     public ResponseEntity<TherapistVO> getTherapistById(@PathVariable Long therapistId) {
         TherapistVO response = therapistService.getTherapistById(therapistId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/findAll")
     public ResponseEntity<List<TherapistVO>> getAllTherapists() {
         List<TherapistVO> response = therapistService.getAllTherapists();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

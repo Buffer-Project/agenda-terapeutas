@@ -1,13 +1,17 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.TherapistException;
+import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
+import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
 
+import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
 import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
+import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,31 +21,24 @@ import java.util.Optional;
 public class TherapistServiceImpl implements ITherapistService {
 
     private final ITherapistRepository therapistRepository;
+    private final IUserService userService;
 
-    public TherapistServiceImpl(ITherapistRepository therapistRepository) {
+    public TherapistServiceImpl(ITherapistRepository therapistRepository, IUserService userService) {
         this.therapistRepository = therapistRepository;
+        this.userService = userService;
     }
 
     @Override
     public TherapistVO createTherapist(TherapistVO therapistVO) {
 
-        Therapist therapist = new Therapist();
+        Long userId = therapistVO.getUser().getId();
+        UserVO userVO = userService.getUserById(userId);
 
-        User user = new User();
-
-        user.setFirstName(therapistVO.getUser().getFirstName());
-        user.setLastName(therapistVO.getUser().getLastName());
-        user.setUsername(therapistVO.getUser().getUsername());
-
-        therapist.setSpecialty(therapistVO.getSpecialty());
-
-        if (therapistVO.getUser() == null || therapistVO.getUser().getId() == null) {
-            throw new TherapistException(TherapistError.EMPTY_USER);
+        if (userVO == null) {
+            throw new UserException(UserError.NOT_FOUND, userId);
         }
-
-        therapist.setUser(user);
-
-        Therapist savedTherapist = therapistRepository.save(therapist);
+        therapistVO.setId(null);
+        Therapist savedTherapist = therapistRepository.save(new Therapist(therapistVO));
         return new TherapistVO(savedTherapist);
     }
 

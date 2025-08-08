@@ -25,7 +25,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserVO> updateUser(@RequestBody UserVO user, @PathVariable Long userId) {
         UserVO response = userService.updateUser(user, userId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping
@@ -37,6 +37,6 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<UserVO> getUserById(@PathVariable Long userId) {
         UserVO response = userService.getUserById(userId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

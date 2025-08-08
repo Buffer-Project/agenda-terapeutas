@@ -27,11 +27,13 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public UserVO createUser(UserVO user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+    public UserVO createUser(UserVO userVO) {
+        if (userRepository.existsByEmail(userVO.getEmail())) {
             throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
         }
-        User savedUser = userRepository.save(new User(new UserBO(user)));
+        userVO.setId(null);
+        userVO.setActive(true);
+        User savedUser = userRepository.save(new User(userVO));
         return new UserVO(savedUser);
 
     }

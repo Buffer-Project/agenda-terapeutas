@@ -79,7 +79,7 @@ public class SessionServiceImpl implements ISessionService {
             throw new PatientException(PatientError.NOT_FOUND, sessionVO.getPatient().getId());
         }
         session.setPatient(new Patient(patient));
-
+        session.setId(null);
         session.setStartDateTime(sessionVO.getStartDateTime());
         session.setEndDateTime(sessionVO.getEndDateTime());
         session.setStatus(SessionStatusEnum.RESERVED);
