@@ -127,7 +127,7 @@ public class SessionServiceImpl implements ISessionService {
     }
 
     @Override
-    public void updateSessionValue(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+    public SessionVO updateSessionValue(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
         Optional<Session> session = sessionRepository.findById(id);
         if (session.isEmpty()) {
             throw new SessionException(SessionError.NOT_FOUND);
@@ -137,7 +137,8 @@ public class SessionServiceImpl implements ISessionService {
 
         JsonNode patched = patch.apply(objectMapper.convertValue(session, JsonNode.class));
         Session updatedSession = objectMapper.treeToValue(patched, Session.class);
-        sessionRepository.save(updatedSession);
+        Session savedSession = sessionRepository.save(updatedSession);
+        return new SessionVO(savedSession);
 
     }
 

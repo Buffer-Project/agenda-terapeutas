@@ -42,7 +42,7 @@ public class Therapist {
 
     public Therapist(TherapistVO therapistVO) {
         this.id = therapistVO.getId();
-        this.user = therapistVO.getUser() != null ? new User(therapistVO.getUser()) : null;
+        this.user = null;
         this.specialty = therapistVO.getSpecialty();
         this.sessions = therapistVO.getSessions() != null ? therapistVO.getSessions().stream().map(Session::new).toList() : null;
     }

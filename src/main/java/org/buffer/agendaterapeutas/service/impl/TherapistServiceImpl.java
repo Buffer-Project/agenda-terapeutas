@@ -6,12 +6,10 @@ import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
-
-import org.buffer.agendaterapeutas.model.vo.UserVO;
-import org.buffer.agendaterapeutas.repository.ITherapistRepository;
-import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
-import org.buffer.agendaterapeutas.service.IUserService;
+import org.buffer.agendaterapeutas.repository.ITherapistRepository;
+import org.buffer.agendaterapeutas.repository.IUserRepository;
+import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,22 +20,36 @@ import java.util.Optional;
 public class TherapistServiceImpl implements ITherapistService {
 
     private final ITherapistRepository therapistRepository;
-    private final IUserService userService;
+    private final IUserRepository userRepository;
 
-    public TherapistServiceImpl(ITherapistRepository therapistRepository, IUserService userService) {
+    public TherapistServiceImpl(ITherapistRepository therapistRepository, IUserRepository userRepository) {
         this.therapistRepository = therapistRepository;
-        this.userService = userService;
+
+
+        this.userRepository = userRepository;
     }
 
     @Override
     public TherapistVO createTherapist(TherapistVO therapistVO) {
-
         Long userId = therapistVO.getUser().getId();
-        userService.getUserById(userId);
+
+        Optional<User> userEntity = userRepository.findById(userId);
+
+        if (userEntity.isEmpty()) {
+            throw new UserException(UserError.NOT_FOUND, userId);
+        }
+
 
         therapistVO.setId(null);
-        therapistVO.setSessions(new ArrayList<>());
-        Therapist savedTherapist = therapistRepository.save(new Therapist(therapistVO));
+
+        Therapist therapistEntity = new Therapist(therapistVO);
+        therapistEntity.setUser(userEntity.get());
+
+        if (therapistEntity.getSessions() == null) {
+            therapistEntity.setSessions(new ArrayList<>());
+        }
+
+        Therapist savedTherapist = therapistRepository.save(therapistEntity);
         return new TherapistVO(savedTherapist);
     }
 

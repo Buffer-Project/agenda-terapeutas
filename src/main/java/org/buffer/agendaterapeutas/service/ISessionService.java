@@ -19,7 +19,7 @@ public interface ISessionService {
 
     void deleteSession(Long id);
 
-    void updateSessionValue(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException;
+    SessionVO updateSessionValue(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException;
 
     List<SessionVO> getSessionsByTherapistId(Long therapistId);
 

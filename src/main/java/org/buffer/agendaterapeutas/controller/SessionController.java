@@ -48,9 +48,9 @@ public class SessionController {
 
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateSessionValue(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-        sessionService.updateSessionValue(id, patch);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<SessionVO> updateSessionValue(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+         SessionVO response = sessionService.updateSessionValue(id, patch);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping
