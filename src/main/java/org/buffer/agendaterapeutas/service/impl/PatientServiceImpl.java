@@ -28,12 +28,8 @@ public class PatientServiceImpl implements IPatientService {
     public PatientVO createPatient(PatientVO patientVO) {
 
         Long userId = patientVO.getUser().getId();
-        UserVO user = userService.getUserById(userId);
+        userService.getUserById(userId);
 
-        if(user== null){
-            throw new PatientException(PatientError.NOT_FOUND, userId);
-        }
-        patientVO.setUser(user);
         patientVO.setId(null);
         Patient patient = patientRepository.save(new Patient(patientVO));
         return new PatientVO(patient);

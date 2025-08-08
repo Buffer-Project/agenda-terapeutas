@@ -24,25 +24,25 @@ public class TherapistController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{therapistId}")
-    public ResponseEntity<TherapistVO> updateTherapist(@RequestBody TherapistVO therapist, @PathVariable Long therapistId) {
-        TherapistVO response = therapistService.updateTherapist(therapist, therapistId);
+    @PutMapping("/{id}")
+    public ResponseEntity<TherapistVO> updateTherapist(@RequestBody TherapistVO therapist, @PathVariable Long id) {
+        TherapistVO response = therapistService.updateTherapist(therapist, id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping("/{therapistId}")
-    public ResponseEntity<Void> deleteTherapist(@PathVariable Long therapistId) {
-        therapistService.deleteTherapistById(therapistId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTherapist(@PathVariable Long id) {
+        therapistService.deleteTherapistById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{therapistId}")
-    public ResponseEntity<TherapistVO> getTherapistById(@PathVariable Long therapistId) {
-        TherapistVO response = therapistService.getTherapistById(therapistId);
+    @GetMapping("/{id}")
+    public ResponseEntity<TherapistVO> getTherapistById(@PathVariable Long id) {
+        TherapistVO response = therapistService.getTherapistById(id);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping()
     public ResponseEntity<List<TherapistVO>> getAllTherapists() {
         List<TherapistVO> response = therapistService.getAllTherapists();
         return ResponseEntity.status(HttpStatus.OK).body(response);

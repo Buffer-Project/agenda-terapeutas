@@ -14,6 +14,7 @@ import org.buffer.agendaterapeutas.repository.IUserRepository;
 import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,7 @@ public class UserServiceImpl implements IUserService {
     public UserVO getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserException(UserError.NOT_FOUND);
+            throw new UserException(UserError.NOT_FOUND, id);
         }
         return new UserVO(user.get());
     }
@@ -74,6 +75,14 @@ public class UserServiceImpl implements IUserService {
             throw new UserException(UserError.NOT_FOUND);
         }
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public List<UserVO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserVO::new)
+                .toList();
     }
 
 }

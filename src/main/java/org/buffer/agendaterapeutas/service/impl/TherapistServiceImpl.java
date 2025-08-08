@@ -14,6 +14,7 @@ import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,12 +33,10 @@ public class TherapistServiceImpl implements ITherapistService {
     public TherapistVO createTherapist(TherapistVO therapistVO) {
 
         Long userId = therapistVO.getUser().getId();
-        UserVO userVO = userService.getUserById(userId);
+        userService.getUserById(userId);
 
-        if (userVO == null) {
-            throw new UserException(UserError.NOT_FOUND, userId);
-        }
         therapistVO.setId(null);
+        therapistVO.setSessions(new ArrayList<>());
         Therapist savedTherapist = therapistRepository.save(new Therapist(therapistVO));
         return new TherapistVO(savedTherapist);
     }
