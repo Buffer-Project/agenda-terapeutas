@@ -5,10 +5,7 @@ import org.buffer.agendaterapeutas.exception.TherapistException;
 import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.exception.errors.UserError;
-import org.buffer.agendaterapeutas.model.bo.UserBO;
-import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
-import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.IUserRepository;
 import org.buffer.agendaterapeutas.service.IUserService;
@@ -74,7 +71,8 @@ public class UserServiceImpl implements IUserService {
         if (user.isEmpty()) {
             throw new UserException(UserError.NOT_FOUND);
         }
-        userRepository.deleteById(id);
+        user.get().setActive(false);
+        userRepository.save(user.get());
     }
 
     @Override

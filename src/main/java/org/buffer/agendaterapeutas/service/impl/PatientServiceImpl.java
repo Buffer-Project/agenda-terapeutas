@@ -4,7 +4,6 @@ import org.buffer.agendaterapeutas.exception.PatientException;
 import org.buffer.agendaterapeutas.exception.errors.PatientError;
 import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
-import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.IPatientRepository;
 import org.buffer.agendaterapeutas.service.IPatientService;
 import org.buffer.agendaterapeutas.service.IUserService;
@@ -65,7 +64,8 @@ public class PatientServiceImpl implements IPatientService {
         if (patient.isEmpty()) {
             throw new PatientException(PatientError.NOT_FOUND, id);
         }
-        patientRepository.delete(patient.get());
+        patient.get().getUser().setActive(false);
+        patientRepository.save(patient.get());
     }
 
     public List<PatientVO> getAllActivePatients() {
