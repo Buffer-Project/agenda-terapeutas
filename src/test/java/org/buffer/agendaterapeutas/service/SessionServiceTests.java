@@ -1,7 +1,10 @@
 package org.buffer.agendaterapeutas.service;
 
 import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
+import org.buffer.agendaterapeutas.exception.PatientException;
 import org.buffer.agendaterapeutas.exception.SessionException;
+import org.buffer.agendaterapeutas.exception.TherapistException;
+import org.buffer.agendaterapeutas.exception.errors.PatientError;
 import org.buffer.agendaterapeutas.exception.errors.SessionError;
 import org.buffer.agendaterapeutas.model.bo.PatientBO;
 import org.buffer.agendaterapeutas.model.bo.SessionBO;
@@ -137,88 +140,229 @@ public class SessionServiceTests {
         verify(sessionRepository).save(any(Session.class));
     }
 
-
-
     @Test
-    public void testCreateSessionWhenSessionExists() {
+    void testCreateSessionWhenTherapistNotFound() {
+        SessionVO sessionVO = getMockSessionVO();
 
-    }
+        TherapistVO therapistVO = new TherapistVO();
+        therapistVO.setId(99L);
+        sessionVO.setTherapist(therapistVO);
 
+        PatientVO patientVO = new PatientVO();
+        patientVO.setId(1L);
+        sessionVO.setPatient(patientVO);
 
-    @Test
-    public void getSessionById() {
+        when(therapistRepository.findById(99L)).thenReturn(Optional.empty());
 
-    }
+        TherapistException ex = assertThrows(TherapistException.class,
+                () -> sessionService.createSession(sessionVO));
 
-    @Test
-    public void getAllSessions() {
-
-    }
-
-    @Test
-    public void testGetSessionsByDateRange() {
-        LocalDateTime start = LocalDateTime.of(2025, 8, 1, 10, 0);
-        LocalDateTime end = start.plusDays(7);
-
-        Session session = new Session();
-        session.setIdSession(1L);
-        session.setStartDateTime(start.plusDays(1));
-        session.setEndDateTime(start.plusDays(1).plusHours(1));
-        session.setStatus(SessionStatusEnum.RESERVED);
-
-        when(sessionRepository.findByStartDateTimeBetween(start, end))
-                .thenReturn(List.of(session));
-
-        List<SessionVO> result = sessionService.getSessionsByDateRange(start, end);
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getIdSession());
-        verify(sessionRepository).findByStartDateTimeBetween(start, end);
-    }
-
-    @Test
-    public void testCancelSessionSuccess() {
-        Session session = new Session();
-        session.setIdSession(1L);
-        session.setStartDateTime(LocalDateTime.now().plusDays(1));
-        session.setStatus(SessionStatusEnum.RESERVED);
-
-        when(sessionRepository.findById(1L)).thenReturn(Optional.of(session));
-        when(sessionRepository.save(session)).thenReturn(session);
-
-        sessionService.cancelSession(1L);
-
-        assertEquals(SessionStatusEnum.CANCELED, session.getStatus());
-        verify(sessionRepository).save(session);
-    }
-
-    @Test
-    public void testCancelSessionNotFound() {
-        when(sessionRepository.findById(1L)).thenReturn(Optional.empty());
-
-        SessionException ex = assertThrows(SessionException.class, () -> {
-            sessionService.cancelSession(1L);
-        });
-
-        assertEquals("Session 100 not found", ex.getMessage());
+        assertEquals(org.buffer.agendaterapeutas.exception.errors.TherapistError.NOT_FOUND.getCode(), ex.getCode());
+        verify(therapistRepository).findById(99L);
+        verify(patientRepository, never()).findById(anyLong());
         verify(sessionRepository, never()).save(any());
     }
 
     @Test
-    public void testCancelSessionInThePast() {
-        Session session = new Session();
-        session.setIdSession(1L);
-        session.setStartDateTime(LocalDateTime.now().minusDays(1));
-        session.setStatus(SessionStatusEnum.RESERVED);
+    void testCreateSessionWhenPatientNotFound() {
+        SessionVO sessionVO = getMockSessionVO();
 
-        when(sessionRepository.findById(1L)).thenReturn(Optional.of(session));
+        TherapistVO therapistVO = new TherapistVO();
+        therapistVO.setId(1L);
+        sessionVO.setTherapist(therapistVO);
 
-        SessionException ex = assertThrows(SessionException.class, () -> {
-            sessionService.cancelSession(1L);
-        });
+        PatientVO patientVO = new PatientVO();
+        patientVO.setId(77L);
+        sessionVO.setPatient(patientVO);
 
-        assertTrue(ex.getMessage().contains("Past sessions cannot be cancelled"));
+        Therapist therapist = new Therapist();
+        therapist.setId(1L);
+
+        when(therapistRepository.findById(1L)).thenReturn(Optional.of(therapist));
+        when(patientRepository.findById(77L)).thenReturn(Optional.empty());
+
+        PatientException ex = assertThrows(PatientException.class,
+                () -> sessionService.createSession(sessionVO));
+
+        assertEquals(PatientError.NOT_FOUND.getCode(), ex.getCode());
+        verify(therapistRepository).findById(1L);
+        verify(patientRepository).findById(77L);
+        verify(sessionRepository, never()).save(any());
+    }
+
+    @Test
+    void testGetSessionById() {
+        Long id = 10L;
+        SessionVO base = getMockSessionVO();
+
+        Session entity = new Session(new SessionBO(base));
+        entity.setIdSession(id);
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.of(entity));
+
+        SessionVO result = sessionService.getSessionById(id);
+
+        assertEquals(id, result.getIdSession());
+        verify(sessionRepository).findById(id);
+    }
+
+    @Test
+    void testGetSessionByIdWhenNotFound() {
+        Long id = 1L;
+        when(sessionRepository.findById(id)).thenReturn(Optional.empty());
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.getSessionById(id));
+        assertEquals(SessionError.NOT_FOUND.getCode(), ex.getCode());
+
+        verify(sessionRepository).findById(id);
+    }
+
+    @Test
+    void testUpdateSession() {
+        Long id = 1L;
+        SessionVO body = getMockSessionVO();
+        body.setIdSession(id);
+
+        Session updated = new Session(new SessionBO(body));
+        updated.setIdSession(id);
+
+        when(sessionRepository.existsById(id)).thenReturn(true);
+        when(sessionRepository.save(any(Session.class))).thenReturn(updated);
+
+        SessionVO result = sessionService.updateSession(body, id);
+
+        assertNotNull(result);
+        assertEquals(id, result.getIdSession());
+        verify(sessionRepository).existsById(id);
+        verify(sessionRepository).save(any(Session.class));
+    }
+
+    @Test
+    void testUpdateSessionWhenProvidedIdNull() {
+        SessionVO body = getMockSessionVO();
+        body.setIdSession(1L);
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.updateSession(body, null));
+        assertEquals(SessionError.MISSING_ID.getCode(), ex.getCode());
+
+        verify(sessionRepository, never()).existsById(anyLong());
+        verify(sessionRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateSessionWhenBodyIdIsNull() {
+        Long id = 50L;
+        SessionVO body = getMockSessionVO();
+        body.setIdSession(null);
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.updateSession(body, id));
+        assertEquals(SessionError.MISSING_ID.getCode(), ex.getCode());
+
+        verify(sessionRepository, never()).existsById(anyLong());
+        verify(sessionRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateSessionWhenIdsConflict() {
+        Long pathId = 700L;
+        SessionVO body = getMockSessionVO();
+        body.setIdSession(1L);
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.updateSession(body, pathId));
+        assertEquals(SessionError.ID_CONFLICT.getCode(), ex.getCode());
+
+        verify(sessionRepository, never()).existsById(anyLong());
+        verify(sessionRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateSessionWhenNotFound() {
+        Long id = 1L;
+        SessionVO body = getMockSessionVO();
+        body.setIdSession(id);
+
+        when(sessionRepository.existsById(id)).thenReturn(false);
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.updateSession(body, id));
+        assertEquals(SessionError.NOT_FOUND.getCode(), ex.getCode());
+
+        verify(sessionRepository).existsById(id);
+        verify(sessionRepository, never()).save(any());
+    }
+
+    @Test
+    void testDeleteSession() {
+        Long id = 3L;
+        SessionVO base = getMockSessionVO();
+        Session entity = new Session(new SessionBO(base));
+        entity.setIdSession(id);
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.of(entity));
+        doNothing().when(sessionRepository).deleteById(id);
+
+        sessionService.deleteSession(id);
+
+        verify(sessionRepository).findById(id);
+        verify(sessionRepository).deleteById(id);
+    }
+
+    @Test
+    void testDeleteSessionWhenNotFound() {
+        Long id = 20L;
+        when(sessionRepository.findById(id)).thenReturn(Optional.empty());
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.deleteSession(id));
+        assertEquals(SessionError.NOT_FOUND.getCode(), ex.getCode());
+
+        verify(sessionRepository).findById(id);
+        verify(sessionRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    void testCancelSessionInTheFuture() {
+        Long id = 9L;
+        Session future = new Session();
+        future.setIdSession(id);
+        future.setStartDateTime(LocalDateTime.now().plusHours(2));
+        future.setEndDateTime(LocalDateTime.now().plusHours(3));
+        future.setStatus(SessionStatusEnum.RESERVED);
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.of(future));
+        when(sessionRepository.save(any(Session.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        sessionService.cancelSession(id);
+
+        verify(sessionRepository).findById(id);
+        verify(sessionRepository).save(argThat(s -> s.getStatus() == SessionStatusEnum.CANCELED));
+    }
+
+    @Test
+    void testCancelSessionInThePast() {
+        Long id = 10L;
+        Session past = new Session();
+        past.setIdSession(id);
+        past.setStartDateTime(LocalDateTime.now().minusHours(1));
+        past.setEndDateTime(LocalDateTime.now().minusMinutes(30));
+        past.setStatus(SessionStatusEnum.RESERVED);
+
+        when(sessionRepository.findById(id)).thenReturn(Optional.of(past));
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.cancelSession(id));
+        assertEquals(SessionError.CANNOT_CANCEL_PAST_SESSION.getCode(), ex.getCode());
+
+        verify(sessionRepository).findById(id);
+        verify(sessionRepository, never()).save(any());
+    }
+
+    @Test
+    void testCancelSessionWhenNotFound() {
+        Long id = 404L;
+        when(sessionRepository.findById(id)).thenReturn(Optional.empty());
+
+        SessionException ex = assertThrows(SessionException.class, () -> sessionService.cancelSession(id));
+        assertEquals(SessionError.NOT_FOUND.getCode(), ex.getCode());
+
+        verify(sessionRepository).findById(id);
         verify(sessionRepository, never()).save(any());
     }
 
@@ -251,4 +395,31 @@ public class SessionServiceTests {
         verify(sessionRepository).findAll();
     }
 
+    @Test
+    void testGetSessionsByDateRange() {
+        LocalDateTime start = LocalDateTime.now().minusDays(1);
+        LocalDateTime end = LocalDateTime.now().plusDays(1);
+
+        Session s = new Session(); s.setIdSession(11L);
+        when(sessionRepository.findByStartDateTimeBetween(start, end)).thenReturn(List.of(s));
+
+        List<SessionVO> result = sessionService.getSessionsByDateRange(start, end);
+
+        assertEquals(1, result.size());
+        assertEquals(11L, result.get(0).getIdSession());
+        verify(sessionRepository).findByStartDateTimeBetween(start, end);
+    }
+
+    @Test
+    void testGetSessionsByTherapistId() {
+        Long therapistId = 5L;
+        Session s1 = new Session(); s1.setIdSession(100L);
+        when(sessionRepository.findByTherapistId(therapistId)).thenReturn(List.of(s1));
+
+        List<SessionVO> result = sessionService.getSessionsByTherapistId(therapistId);
+
+        assertEquals(1, result.size());
+        assertEquals(100L, result.get(0).getIdSession());
+        verify(sessionRepository).findByTherapistId(therapistId);
+    }
 }
