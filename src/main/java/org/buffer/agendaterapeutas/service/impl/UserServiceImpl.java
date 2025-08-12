@@ -1,9 +1,7 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 
-import org.buffer.agendaterapeutas.exception.TherapistException;
 import org.buffer.agendaterapeutas.exception.UserException;
-import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
@@ -45,19 +43,20 @@ public class UserServiceImpl implements IUserService {
         return new UserVO(user.get());
     }
 
+
     @Override
     public UserVO updateUser(UserVO user, Long id) {
 
         if (id == null || user.getId() == null) {
-            throw new TherapistException(TherapistError.MISSING_ID);
+            throw new UserException(UserError.MISSING_ID);
         }
 
         if (!userRepository.existsById(id)) {
-            throw new TherapistException(TherapistError.NOT_FOUND, id);
+            throw new UserException(UserError.NOT_FOUND, id);
         }
 
         if (!user.getId().equals(id)) {
-            throw new TherapistException(TherapistError.ID_CONFLICT);
+            throw new UserException(UserError.ID_CONFLICT);
         }
 
         User updatedUser = userRepository.save(new User(user));

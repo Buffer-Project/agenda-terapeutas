@@ -116,7 +116,7 @@ class TherapistControllerTests {
 
         when(therapistService.getAllTherapists()).thenReturn(therapists);
 
-        mockMvc.perform(get("/api/v1/therapist/findAll"))
+        mockMvc.perform(get("/api/v1/therapist"))
                 .andExpectAll(
                         status().isOk(),
                         content().json(objectMapper.writeValueAsString(therapists))
