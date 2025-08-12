@@ -408,7 +408,7 @@ public class SessionServiceTests {
         List<SessionVO> result = sessionService.getSessionsByTherapistId(therapistId);
 
         assertEquals(1, result.size());
-        assertEquals(100L, result.get(0).getIdSession());
+        assertEquals(100L, result.getFirst().getIdSession());
         verify(sessionRepository).findByTherapistId(therapistId);
     }
 }
