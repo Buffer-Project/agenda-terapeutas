@@ -81,17 +81,6 @@ public class SessionServiceTests {
         return therapistVO;
     }
 
-    /*
-    SessionVO createSession(SessionVO sessionVO);
-    SessionVO getSessionById(Long id);
-    List<SessionVO> getAllSessions();
-    List<SessionVO> getSessionsByDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
-    SessionVO updateSession(SessionVO session,Long id);
-    void deleteSession(Long id);
-    void cancelSession(Long id);
-    List<SessionVO> getSessionsByTherapistId(Long therapistId);
-    * */
-
     @Test
     public void testCreateSession() {
         SessionVO sessionVO = getMockSessionVO();
