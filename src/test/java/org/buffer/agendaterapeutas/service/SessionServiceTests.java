@@ -395,7 +395,7 @@ public class SessionServiceTests {
         List<SessionVO> result = sessionService.getSessionsByDateRange(start, end);
 
         assertEquals(1, result.size());
-        assertEquals(11L, result.get(0).getIdSession());
+        assertEquals(11L, result.getFirst().getIdSession());
         verify(sessionRepository).findByStartDateTimeBetween(start, end);
     }
 
