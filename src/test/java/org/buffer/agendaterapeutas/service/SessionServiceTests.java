@@ -11,7 +11,6 @@ import org.buffer.agendaterapeutas.model.bo.SessionBO;
 import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.entity.Session;
-import org.buffer.agendaterapeutas.model.entity.Specialty;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.buffer.agendaterapeutas.model.vo.SessionVO;
