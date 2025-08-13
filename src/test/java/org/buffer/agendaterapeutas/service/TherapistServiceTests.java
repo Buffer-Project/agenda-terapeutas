@@ -93,7 +93,7 @@ class TherapistServiceTests {
     @Test
     void createTherapistWhenSessionsIsEmptyTest() {
         TherapistVO therapistVO = getMockTherapistVO();
-        therapistVO.setSessions(null);
+        therapistVO.setSessions(null); //Aun asignandolo a null, el coverage toma como si no se pasara por el if que valida si sessions es null
         therapistVO.setId(7L);
 
         User user = new User();
