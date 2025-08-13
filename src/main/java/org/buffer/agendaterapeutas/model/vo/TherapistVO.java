@@ -37,6 +37,7 @@ public class TherapistVO {
         this.id = therapist.getId();
         this.user = therapist.getUser() != null ? new UserVO(therapist.getUser()) : null;
         this.specialty = therapist.getSpecialty();
+        this.sessions = therapist.getSessions() != null ? therapist.getSessions().stream().map(SessionVO::new).toList() : null;
     }
 
     public Long getId() {
