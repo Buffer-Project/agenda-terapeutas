@@ -40,7 +40,7 @@ public class SessionControllerTests {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(new SessionController(sessionService))
-                .setMessageConverters(jacksonConverter)   // <-- MUY IMPORTANTE
+                .setMessageConverters(jacksonConverter)
                 .build();
     }
 
