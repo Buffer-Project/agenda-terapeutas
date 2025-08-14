@@ -33,21 +33,11 @@ public class TherapistServiceImpl implements ITherapistService {
     public TherapistVO createTherapist(TherapistVO therapistVO) {
         Long userId = therapistVO.getUser().getId();
 
-        Optional<User> userEntity = userRepository.findById(userId);
-
-        if (userEntity.isEmpty()) {
-            throw new UserException(UserError.NOT_FOUND, userId);
-        }
-
-
+        User userEntity = userRepository.findById(userId).orElseThrow(() -> new UserException(UserError.NOT_FOUND));
         therapistVO.setId(null);
 
         Therapist therapistEntity = new Therapist(therapistVO);
-        therapistEntity.setUser(userEntity.get());
-
-        if (therapistEntity.getSessions() == null) {
-            therapistEntity.setSessions(new ArrayList<>());
-        }
+        therapistEntity.setUser(userEntity);
 
         Therapist savedTherapist = therapistRepository.save(therapistEntity);
         return new TherapistVO(savedTherapist);
@@ -74,14 +64,11 @@ public class TherapistServiceImpl implements ITherapistService {
 
     @Override
     public void deleteTherapistById(Long id) {
-        Optional<Therapist> therapist = therapistRepository.findById(id);
-        if (therapist.isEmpty()) {
-            throw new TherapistException(TherapistError.NOT_FOUND, id);
-        }
+        Therapist therapist = therapistRepository.findById(id).orElseThrow(() -> new TherapistException(TherapistError.NOT_FOUND, id));
 
-        therapist.get().getUser().setActive(false);
+        therapist.getUser().setActive(false);
 
-        therapistRepository.save(therapist.get());
+        therapistRepository.save(therapist);
     }
 
     @Override

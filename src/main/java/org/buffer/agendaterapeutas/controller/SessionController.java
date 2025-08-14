@@ -31,13 +31,13 @@ public class SessionController {
     @GetMapping("/{id}")
     public ResponseEntity<SessionVO> getSessionById(@PathVariable Long id) {
         SessionVO response = sessionService.getSessionById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SessionVO> updateSession(@RequestBody SessionVO session, @PathVariable Long id) {
         SessionVO response = sessionService.updateSession(session, id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -49,20 +49,15 @@ public class SessionController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<SessionVO> updateSessionValue(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-         SessionVO response = sessionService.updateSessionValue(id, patch);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        SessionVO response = sessionService.updateSessionValue(id, patch);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<List<SessionVO>> getAllSessions(@RequestParam Map<String, String> params) {
         List<SessionVO> response = sessionService.getAllSessions(params);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/therapist/{therapistId}")
-    public ResponseEntity<List<SessionVO>> getSessionsByTherapist(@PathVariable Long therapistId) {
-        List<SessionVO> response = sessionService.getSessionsByTherapistId(therapistId);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
-    }
 
 }

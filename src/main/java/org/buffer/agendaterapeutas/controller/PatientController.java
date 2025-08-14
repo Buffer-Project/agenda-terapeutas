@@ -29,13 +29,13 @@ public class PatientController {
     @GetMapping("/{id}")
     public ResponseEntity<PatientVO> getPatientById(@PathVariable Long id) {
         PatientVO response = patientService.getPatientById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PatientVO> updatePatient(@RequestBody PatientVO patient, @PathVariable Long id) {
         PatientVO response = patientService.updatePatient(patient, id);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -47,6 +47,6 @@ public class PatientController {
     @GetMapping("/findAll")
     public ResponseEntity<List<PatientVO>> getAllActivePatients() {
         List<PatientVO> response = patientService.getAllActivePatients();
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,9 +1,12 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.PatientException;
+import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.PatientError;
+import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
+import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.IPatientRepository;
 import org.buffer.agendaterapeutas.service.IPatientService;
 import org.buffer.agendaterapeutas.service.IUserService;
@@ -27,7 +30,12 @@ public class PatientServiceImpl implements IPatientService {
     public PatientVO createPatient(PatientVO patientVO) {
 
         Long userId = patientVO.getUser().getId();
-        userService.getUserById(userId);
+
+        if(userId == null) {
+            userService.createUser(new UserVO());
+        } else{
+            userService.getUserById(userId);
+        }
 
         patientVO.setId(null);
         Patient patient = patientRepository.save(new Patient(patientVO));
@@ -60,12 +68,10 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     public void deletePatientById(Long id) {
-        Optional<Patient> patient = patientRepository.findById(id);
-        if (patient.isEmpty()) {
-            throw new PatientException(PatientError.NOT_FOUND, id);
-        }
-        patient.get().getUser().setActive(false);
-        patientRepository.save(patient.get());
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientException(PatientError.NOT_FOUND, id));
+
+        patient.getUser().setActive(false);
+        patientRepository.save(patient);
     }
 
     public List<PatientVO> getAllActivePatients() {

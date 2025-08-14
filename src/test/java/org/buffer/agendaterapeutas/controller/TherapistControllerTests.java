@@ -3,6 +3,7 @@ package org.buffer.agendaterapeutas.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
+import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.service.impl.TherapistServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,12 +30,12 @@ class TherapistControllerTests {
 
 
     private MockMvc mockMvc;
-
+    private final ISessionService sessionService = mock(ISessionService.class);
     private final TherapistServiceImpl therapistService = mock(TherapistServiceImpl.class);
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new TherapistController(therapistService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new TherapistController(therapistService,sessionService)).build();
     }
 
 

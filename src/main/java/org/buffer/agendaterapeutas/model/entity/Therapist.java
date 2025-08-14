@@ -5,6 +5,7 @@ import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.hibernate.annotations.Cascade;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(name = "therapist")
@@ -44,7 +45,7 @@ public class Therapist {
         this.id = therapistVO.getId();
         this.user = null;
         this.specialty = therapistVO.getSpecialty();
-        this.sessions = therapistVO.getSessions() != null ? therapistVO.getSessions().stream().map(Session::new).toList() : null;
+        this.sessions = therapistVO.getSessions() != null ? therapistVO.getSessions().stream().map(Session::new).toList() : new ArrayList<>();
     }
 
     public Long getId() {
