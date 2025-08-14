@@ -12,7 +12,6 @@ import org.buffer.agendaterapeutas.repository.IUserRepository;
 import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +23,6 @@ public class TherapistServiceImpl implements ITherapistService {
 
     public TherapistServiceImpl(ITherapistRepository therapistRepository, IUserRepository userRepository) {
         this.therapistRepository = therapistRepository;
-
-
         this.userRepository = userRepository;
     }
 

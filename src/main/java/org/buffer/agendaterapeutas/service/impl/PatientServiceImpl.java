@@ -1,9 +1,7 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.PatientException;
-import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.PatientError;
-import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
@@ -29,12 +27,11 @@ public class PatientServiceImpl implements IPatientService {
     @Override
     public PatientVO createPatient(PatientVO patientVO) {
 
-        Long userId = patientVO.getUser().getId();
-
-        if(userId == null) {
-            userService.createUser(new UserVO());
-        } else{
-            userService.getUserById(userId);
+        if (patientVO.getUser() == null) {
+            UserVO user = userService.createUser(new UserVO());
+            patientVO.setUser(user);
+        } else {
+            userService.getUserById(patientVO.getUser().getId());
         }
 
         patientVO.setId(null);
