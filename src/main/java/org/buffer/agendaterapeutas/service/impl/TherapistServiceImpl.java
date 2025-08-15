@@ -5,11 +5,10 @@ import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
-import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
-import org.buffer.agendaterapeutas.repository.IUserRepository;
 import org.buffer.agendaterapeutas.service.ITherapistService;
+import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,22 +18,30 @@ import java.util.Optional;
 public class TherapistServiceImpl implements ITherapistService {
 
     private final ITherapistRepository therapistRepository;
-    private final IUserRepository userRepository;
+    private final IUserService userService;
 
-    public TherapistServiceImpl(ITherapistRepository therapistRepository, IUserRepository userRepository) {
+    public TherapistServiceImpl(ITherapistRepository therapistRepository, IUserService userService) {
         this.therapistRepository = therapistRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
     public TherapistVO createTherapist(TherapistVO therapistVO) {
+
+        if (therapistVO.getUser() == null) {
+            throw new TherapistException(TherapistError.EMPTY_USER);
+        }
+
         Long userId = therapistVO.getUser().getId();
 
-        User userEntity = userRepository.findById(userId).orElseThrow(() -> new UserException(UserError.NOT_FOUND));
-        therapistVO.setId(null);
+        if (!userService.existsById(userId)) {
+            throw new UserException(UserError.NOT_FOUND);
+        }
+        if(therapistVO.getId()!=null){
+            throw new TherapistException(TherapistError.INVALID_FORMAT);
+        }
 
         Therapist therapistEntity = new Therapist(therapistVO);
-        therapistEntity.setUser(userEntity);
 
         Therapist savedTherapist = therapistRepository.save(therapistEntity);
         return new TherapistVO(savedTherapist);

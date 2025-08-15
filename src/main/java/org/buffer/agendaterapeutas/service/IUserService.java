@@ -15,4 +15,6 @@ public interface IUserService {
     void deleteUser(Long id);
 
     List<UserVO> getAllUsers();
+
+    boolean existsById(Long id);
 }

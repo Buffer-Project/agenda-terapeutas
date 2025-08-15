@@ -1,17 +1,11 @@
 package org.buffer.agendaterapeutas.service;
 
-
-import org.buffer.agendaterapeutas.enums.SessionStatusEnum;
 import org.buffer.agendaterapeutas.exception.TherapistException;
 import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
 import org.buffer.agendaterapeutas.exception.errors.UserError;
-import org.buffer.agendaterapeutas.model.bo.TherapistBO;
-import org.buffer.agendaterapeutas.model.entity.Session;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 import org.buffer.agendaterapeutas.model.entity.User;
-import org.buffer.agendaterapeutas.model.vo.PatientVO;
-import org.buffer.agendaterapeutas.model.vo.SessionVO;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
@@ -73,7 +67,7 @@ class TherapistServiceTests {
     void createTherapistTest() {
 
         TherapistVO therapistVO = getMockTherapistVO();
-        therapistVO.setId(7L);
+        therapistVO.setId(null);
         Therapist therapistEntity = new Therapist(therapistVO);
         User user = new User();
         user.setId(1L);
@@ -82,47 +76,42 @@ class TherapistServiceTests {
         user.setLastName("Doe");
         therapistEntity.setUser(user);
 
-        when(userRepository.findById(therapistVO.getUser().getId())).thenReturn(Optional.of(therapistEntity.getUser()));
+        when(userService.existsById(therapistVO.getUser().getId())).thenReturn(true);
         when(therapistRepository.save(any(Therapist.class))).thenReturn(therapistEntity);
 
         TherapistVO result = therapistService.createTherapist(therapistVO);
 
-        assertEquals(7L, result.getId());
+        assertNotNull(result.getUser());
 
         verify(therapistRepository, times(1)).save(any(Therapist.class));
-
     }
 
     @Test
-    void createTherapistWhenSessionsIsEmptyTest() {
+    void createTherapistWhenProvidedTherapistHasNullUserTest(){
         TherapistVO therapistVO = getMockTherapistVO();
-//        therapistVO.setSessions(null); //Aun asignandolo a null, el coverage toma como si no se pasara por el if que valida si sessions es null
-        therapistVO.setId(7L);
+        therapistVO.setUser(null);
 
-        SessionVO sessionVO = new SessionVO(1L,new TherapistVO(), new PatientVO(), null, null, SessionStatusEnum.RESERVED);
-        SessionVO sessionVO2 = new SessionVO(1L,new TherapistVO(), new PatientVO(), null, null, SessionStatusEnum.CANCELLED);
-        therapistVO.setSessions(List.of(sessionVO, sessionVO2));
+        TherapistException result = assertThrows(TherapistException.class, () -> {
+            therapistService.createTherapist(therapistVO);
+        });
 
-        User user = new User();
-        user.setId(1L);
-        user.setActive(true);
-        user.setFirstName("John");
-        user.setLastName("Doe");
+        assertEquals(result.getCode(), TherapistError.EMPTY_USER.getCode());
+        assertEquals(TherapistException.class, result.getClass());
+    }
 
+    @Test
+    void createTherapistWhenProvidedTherapistHasIdTest(){
+        TherapistVO therapistVO = getMockTherapistVO();
+        therapistVO.setId(1L);
 
-        Therapist savedTherapistEntity = new Therapist();
-        savedTherapistEntity.setId(7L);
-        savedTherapistEntity.setUser(user);
-        savedTherapistEntity.setSpecialty("Cardiology");
-        savedTherapistEntity.setSessions(new ArrayList<>());
+        when(userService.existsById(therapistVO.getUser().getId())).thenReturn(true);
 
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(therapistRepository.save(any(Therapist.class))).thenReturn(savedTherapistEntity);
+        TherapistException result = assertThrows(TherapistException.class, () -> {
+            therapistService.createTherapist(therapistVO);
+        });
 
-        TherapistVO result = therapistService.createTherapist(therapistVO);
-
-//        assertTrue(result.getSessions().isEmpty());
-        verify(therapistRepository, times(1)).save(any(Therapist.class));
+        assertEquals(result.getCode(), TherapistError.INVALID_FORMAT.getCode());
+        assertEquals(TherapistException.class, result.getClass());
     }
 
 
@@ -131,7 +120,8 @@ class TherapistServiceTests {
         Long id = 43L;
         TherapistVO therapistVO = getMockTherapistVO();
         therapistVO.getUser().setId(id);
-        when(userRepository.findById(id)).thenReturn(Optional.empty());
+
+        when(userService.existsById(id)).thenReturn(false);
 
         UserException result = assertThrows(UserException.class, () -> {
             therapistService.createTherapist(therapistVO);
@@ -139,7 +129,6 @@ class TherapistServiceTests {
 
         assertEquals(result.getCode(), UserError.NOT_FOUND.getCode());
         assertEquals(UserException.class, result.getClass());
-
     }
 
 

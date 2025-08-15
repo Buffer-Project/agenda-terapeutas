@@ -157,6 +157,7 @@ public class SessionServiceImpl implements ISessionService {
     private Specification<Session> getSpecifications(Map<String, String> params) {
         if (params.isEmpty()) return null;
         String key = params.keySet().stream().findFirst().get();
+
         Specification<Session> spec = where(getSessionSpec(key, params.get(key)));
         params.remove(key);
         for (Map.Entry<String, String> entry : params.entrySet()) {

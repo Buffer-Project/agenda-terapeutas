@@ -152,34 +152,34 @@ class UserServiceTests {
         UserVO userVO = getMockUserVO();
         userVO.setId(null);
 
-        UserException result = assertThrows(UserException.class,()->{
-            userService.updateUser(userVO,id);
+        UserException result = assertThrows(UserException.class, () -> {
+            userService.updateUser(userVO, id);
         });
 
-        assertEquals(UserError.MISSING_ID.getCode(),result.getCode());
+        assertEquals(UserError.MISSING_ID.getCode(), result.getCode());
         assertEquals(UserException.class, result.getClass());
 
     }
 
     @Test
-    void updateUserWhenUserDoesNotExistTest(){
+    void updateUserWhenUserDoesNotExistTest() {
 
         Long id = 400L;
         UserVO userVO = getMockUserVO();
 
         when(userRepository.existsById(id)).thenReturn(false);
 
-        UserException result = assertThrows(UserException.class,()->{
-            userService.updateUser(userVO,id);
+        UserException result = assertThrows(UserException.class, () -> {
+            userService.updateUser(userVO, id);
         });
 
-        assertEquals(UserError.NOT_FOUND.getCode(),result.getCode());
+        assertEquals(UserError.NOT_FOUND.getCode(), result.getCode());
         assertEquals(UserException.class, result.getClass());
 
     }
 
     @Test
-    void updateUserWhenProvidedIdDoesNotMatchUserIdTest(){
+    void updateUserWhenProvidedIdDoesNotMatchUserIdTest() {
 
 
         Long id = 400L;
@@ -187,11 +187,11 @@ class UserServiceTests {
 
         when(userRepository.existsById(id)).thenReturn(true);
 
-        UserException result = assertThrows(UserException.class,()->{
-            userService.updateUser(userVO,id);
+        UserException result = assertThrows(UserException.class, () -> {
+            userService.updateUser(userVO, id);
         });
 
-        assertEquals(UserError.ID_CONFLICT.getCode(),result.getCode());
+        assertEquals(UserError.ID_CONFLICT.getCode(), result.getCode());
         assertEquals(UserException.class, result.getClass());
 
     }
@@ -250,6 +250,18 @@ class UserServiceTests {
 
         verify(userRepository, times(1)).findAll();
 
+    }
+
+    @Test
+    void existsByIdTest() {
+        Long id = 1L;
+        when(userRepository.existsById(id)).thenReturn(true);
+
+        boolean result = userService.existsById(id);
+
+        assertTrue(result);
+
+        verify(userRepository, times(1)).existsById(id);
     }
 
 

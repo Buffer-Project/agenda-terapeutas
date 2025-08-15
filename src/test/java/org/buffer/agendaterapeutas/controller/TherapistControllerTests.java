@@ -2,6 +2,7 @@ package org.buffer.agendaterapeutas.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.buffer.agendaterapeutas.model.vo.SessionVO;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.service.impl.TherapistServiceImpl;
@@ -35,7 +36,7 @@ class TherapistControllerTests {
 
     @BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new TherapistController(therapistService,sessionService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new TherapistController(therapistService, sessionService)).build();
     }
 
 
@@ -64,15 +65,15 @@ class TherapistControllerTests {
         when(therapistService.updateTherapist(any(TherapistVO.class), any(Long.class))).thenReturn(therapistVO);
 
         mockMvc.perform(
-                put("/api/v1/therapist/" + id)
-                .content(objectMapper.writeValueAsString(therapistVO))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        )
+                        put("/api/v1/therapist/" + id)
+                                .content(objectMapper.writeValueAsString(therapistVO))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpectAll(
-                status().isOk(),
-                content().json(objectMapper.writeValueAsString(therapistVO))
-        );
+                        status().isOk(),
+                        content().json(objectMapper.writeValueAsString(therapistVO))
+                );
         verify(therapistService).updateTherapist(any(TherapistVO.class), any(Long.class));
 
     }
@@ -124,7 +125,25 @@ class TherapistControllerTests {
                 );
 
         verify(therapistService, times(1)).getAllTherapists();
+    }
 
+    @Test
+    void getSessionsByTherapistTest() throws Exception {
+        Long therapistId = 1L;
+
+        SessionVO sessionVO = mock(SessionVO.class);
+        SessionVO sessionVO2 = mock(SessionVO.class);
+        SessionVO sessionVO3 = mock(SessionVO.class);
+        List<SessionVO> sessions = List.of(sessionVO, sessionVO2, sessionVO3);
+
+        when(sessionService.getSessionsByTherapistId(therapistId)).thenReturn(sessions);
+
+        mockMvc.perform(
+                get("/api/v1/therapist/" + therapistId + "/sessions")
+        ).andExpectAll(
+                status().isOk(),
+                content().json(objectMapper.writeValueAsString(sessions))
+        );
 
     }
 

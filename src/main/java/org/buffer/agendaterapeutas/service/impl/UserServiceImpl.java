@@ -36,11 +36,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserVO getUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new UserException(UserError.NOT_FOUND, id);
-        }
-        return new UserVO(user.get());
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException(UserError.NOT_FOUND, id));
+
+        return new UserVO(user);
     }
 
 
@@ -81,6 +79,11 @@ public class UserServiceImpl implements IUserService {
                 .stream()
                 .map(UserVO::new)
                 .toList();
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
     }
 
 }
