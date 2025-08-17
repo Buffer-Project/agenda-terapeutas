@@ -26,7 +26,9 @@ public class UserServiceImpl implements IUserService {
         if (userRepository.existsByEmail(userVO.getEmail())) {
             throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
         }
-        userVO.setId(null);
+        if(userVO.getId() != null){
+            throw new UserException(UserError.INVALID_FORMAT);
+        }
         userVO.setActive(true);
         User savedUser = userRepository.save(new User(userVO));
         return new UserVO(savedUser);
@@ -36,7 +38,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserVO getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserException(UserError.NOT_FOUND, id));
-
         return new UserVO(user);
     }
 

@@ -18,7 +18,7 @@ public class UserVO {
 
     public UserVO() {}
 
-    public UserVO(Long id, String username, String password, String firstName, String lastName, String email, String phone, String gender, int birthDate) {
+    public UserVO(Long id, String username, String password, String firstName, String lastName, String email, String phone, String gender, int birthDate,boolean active) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -28,6 +28,7 @@ public class UserVO {
         this.phone = phone;
         this.gender = gender;
         this.birthDate = birthDate;
+        this.active = active;
     }
 
     public UserVO(UserBO user) {
@@ -40,6 +41,7 @@ public class UserVO {
         this.phone = user.getPhone();
         this.gender = user.getGender();
         this.birthDate = user.getBirthDate();
+        this.active = user.isActive();
     }
 
     public UserVO(User user) {
@@ -52,6 +54,7 @@ public class UserVO {
         this.phone = user.getPhone();
         this.gender = user.getGender();
         this.birthDate = user.getBirthDate();
+        this.active = user.isActive();
     }
 
     public Long getId() {

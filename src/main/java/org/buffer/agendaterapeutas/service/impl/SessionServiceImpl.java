@@ -57,6 +57,9 @@ public class SessionServiceImpl implements ISessionService {
 
     @Override
     public SessionVO createSession(SessionVO sessionVO) {
+        if(sessionVO.getId() != null){
+            throw new SessionException(SessionError.INVALID_FORMAT);
+        }
         Session session = new Session();
         Long userId = sessionVO.getTherapist().getUser().getId();
         UserVO user = userService.getUserById(userId);
