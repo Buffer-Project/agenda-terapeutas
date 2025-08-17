@@ -12,7 +12,6 @@ import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TherapistServiceImpl implements ITherapistService {
@@ -37,7 +36,7 @@ public class TherapistServiceImpl implements ITherapistService {
         if (!userService.existsById(userId)) {
             throw new UserException(UserError.NOT_FOUND);
         }
-        if(therapistVO.getId()!=null){
+        if (therapistVO.getId() != null) {
             throw new TherapistException(TherapistError.INVALID_FORMAT);
         }
 
@@ -77,12 +76,8 @@ public class TherapistServiceImpl implements ITherapistService {
 
     @Override
     public TherapistVO getTherapistById(Long id) {
-        Optional<Therapist> therapist = therapistRepository.findById(id);
-        if (therapist.isEmpty()) {
-            throw new TherapistException(TherapistError.NOT_FOUND, id);
-        }
-
-        return new TherapistVO(therapist.get());
+        Therapist therapist = therapistRepository.findById(id).orElseThrow(() -> new TherapistException(TherapistError.NOT_FOUND, id));
+        return new TherapistVO(therapist);
     }
 
     @Override

@@ -9,7 +9,6 @@ import org.buffer.agendaterapeutas.service.IPatientService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements IPatientService {
@@ -33,11 +32,8 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public PatientVO getPatientById(Long id) {
-        Optional<Patient> patient = patientRepository.findById(id);
-        if (patient.isEmpty()) {
-            throw new PatientException(PatientError.NOT_FOUND, id);
-        }
-        return new PatientVO(patient.get());
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientException(PatientError.NOT_FOUND, id));
+        return new PatientVO(patient);
     }
 
     @Override

@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.buffer.agendaterapeutas.repository.specifications.SessionSpecifications.getSessionSpec;
 import static org.springframework.data.jpa.domain.Specification.where;
@@ -91,11 +90,9 @@ public class SessionServiceImpl implements ISessionService {
 
     @Override
     public SessionVO getSessionById(Long id) {
-        Optional<Session> session = sessionRepository.findById(id);
-        if (session.isEmpty()) {
-            throw new SessionException(SessionError.NOT_FOUND, id);
-        }
-        return new SessionVO(session.get());
+        Session session = sessionRepository.findById(id).orElseThrow(() -> new SessionException(SessionError.NOT_FOUND, id));
+
+        return new SessionVO(session);
     }
 
     @Override
@@ -119,20 +116,16 @@ public class SessionServiceImpl implements ISessionService {
 
     @Override
     public void deleteSession(Long id) {
-        Optional<Session> session = sessionRepository.findById(id);
-        if (session.isEmpty()) {
-            throw new SessionException(SessionError.NOT_FOUND);
-        }
+        sessionRepository.findById(id).orElseThrow(() -> new SessionException(SessionError.NOT_FOUND, id));
+
         sessionRepository.deleteById(id);
     }
 
     @Override
     public SessionVO updateSessionValue(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
-        Optional<Session> session = sessionRepository.findById(id);
-        if (session.isEmpty()) {
-            throw new SessionException(SessionError.NOT_FOUND);
-        }
-        if (!session.get().getStartDateTime().isAfter(LocalDateTime.now()))
+        Session session = sessionRepository.findById(id).orElseThrow(() -> new SessionException(SessionError.NOT_FOUND, id));
+
+        if (!session.getStartDateTime().isAfter(LocalDateTime.now()))
             throw new SessionException(SessionError.CANNOT_CANCEL_PAST_SESSION);
 
         JsonNode patched = patch.apply(objectMapper.convertValue(session, JsonNode.class));

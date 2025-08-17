@@ -10,7 +10,6 @@ import org.buffer.agendaterapeutas.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -64,13 +63,10 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void deleteUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
-            throw new UserException(UserError.NOT_FOUND);
-        }
-        User userToSoftDelete = user.get();
-        userToSoftDelete.setActive(false);
-        userRepository.save(userToSoftDelete);
+        User user = userRepository.findById(id).orElseThrow(() -> new UserException(UserError.NOT_FOUND, id));
+
+        user.setActive(false);
+        userRepository.save(user);
     }
 
     @Override
