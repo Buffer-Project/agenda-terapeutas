@@ -1,5 +1,7 @@
 package org.buffer.agendaterapeutas.controller;
 
+import org.buffer.agendaterapeutas.model.vo.SessionVO;
+import org.buffer.agendaterapeutas.service.ISessionService;
 import org.buffer.agendaterapeutas.service.ITherapistService;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.springframework.http.HttpStatus;
@@ -13,9 +15,11 @@ import java.util.List;
 public class TherapistController {
 
     private final ITherapistService therapistService;
+    private final ISessionService sessionService;
 
-    public TherapistController(ITherapistService therapistService) {
+    public TherapistController(ITherapistService therapistService, ISessionService sessionService) {
         this.therapistService = therapistService;
+        this.sessionService = sessionService;
     }
 
     @PostMapping
@@ -24,28 +28,34 @@ public class TherapistController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{therapistId}")
-    public ResponseEntity<TherapistVO> updateTherapist(@RequestBody TherapistVO therapist, @PathVariable Long therapistId) {
-        TherapistVO response = therapistService.updateTherapist(therapist, therapistId);
+    @PutMapping("/{id}")
+    public ResponseEntity<TherapistVO> updateTherapist(@RequestBody TherapistVO therapist, @PathVariable Long id) {
+        TherapistVO response = therapistService.updateTherapist(therapist, id);
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{therapistId}")
-    public ResponseEntity<Void> deleteTherapist(@PathVariable Long therapistId) {
-        therapistService.deleteTherapistById(therapistId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTherapist(@PathVariable Long id) {
+        therapistService.deleteTherapistById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{therapistId}")
-    public ResponseEntity<TherapistVO> getTherapistById(@PathVariable Long therapistId) {
-        TherapistVO response = therapistService.getTherapistById(therapistId);
+    @GetMapping("/{id}")
+    public ResponseEntity<TherapistVO> getTherapistById(@PathVariable Long id) {
+        TherapistVO response = therapistService.getTherapistById(id);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping()
     public ResponseEntity<List<TherapistVO>> getAllTherapists() {
         List<TherapistVO> response = therapistService.getAllTherapists();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/sessions")
+    public ResponseEntity<List<SessionVO>> getSessionsByTherapist(@PathVariable Long id) {
+        List<SessionVO> response = sessionService.getSessionsByTherapistId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

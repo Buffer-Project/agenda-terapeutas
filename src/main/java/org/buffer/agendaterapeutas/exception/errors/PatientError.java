@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 public enum PatientError implements SchedulerError{
     NOT_FOUND(1001, HttpStatus.NOT_FOUND, "Patient %s not found"),
     MISSING_ID(1002, HttpStatus.BAD_REQUEST, "Missing required field: id"),
-    ID_CONFLICT(1003, HttpStatus.BAD_REQUEST, "Provided ids don't match");
+    ID_CONFLICT(1003, HttpStatus.BAD_REQUEST, "Provided ids don't match"),
+    INVALID_FORMAT(1004, HttpStatus.BAD_REQUEST, "Invalid format");
 
     private final int code;
     private final HttpStatus httpStatus;

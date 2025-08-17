@@ -1,12 +1,16 @@
 package org.buffer.agendaterapeutas.controller;
 
-import org.buffer.agendaterapeutas.service.ISessionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.buffer.agendaterapeutas.model.vo.SessionVO;
+import org.buffer.agendaterapeutas.service.ISessionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/session")
@@ -21,7 +25,7 @@ public class SessionController {
     @PostMapping()
     public ResponseEntity<SessionVO> createSession(@RequestBody SessionVO sessionVO) {
         SessionVO response = sessionService.createSession(sessionVO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
@@ -39,36 +43,21 @@ public class SessionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
         sessionService.deleteSession(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    //TODO: delete, use update instead
-    @DeleteMapping("/cancelReservation/{id}")
-    public ResponseEntity<Void> cancelSession(@PathVariable Long id) {
-        sessionService.cancelSession(id);
-        return ResponseEntity.ok().build();
-    }
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<SessionVO>> getAllSessions() {
-        List<SessionVO> response = sessionService.getAllSessions();
+    @PatchMapping("/{id}")
+    public ResponseEntity<SessionVO> updateSessionValue(@PathVariable Long id, @RequestBody JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+        SessionVO response = sessionService.updateSessionValue(id, patch);
         return ResponseEntity.ok(response);
     }
 
-    //TODO: Move to get all with optional query params
-    @GetMapping("/range")
-    public ResponseEntity<List<SessionVO>> getSessionsByDateRange(
-            @RequestParam LocalDateTime startDate,
-            @RequestParam LocalDateTime endDate
-    ) {
-        List<SessionVO> response = sessionService.getSessionsByDateRange(startDate, endDate);
+    @GetMapping
+    public ResponseEntity<List<SessionVO>> getAllSessions(@RequestParam Map<String, String> params) {
+        List<SessionVO> response = sessionService.getAllSessions(params);
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{therapistId}")
-    public ResponseEntity<List<SessionVO>> getSessionsByTherapist(@PathVariable Long therapistId) {
-        List<SessionVO> response = sessionService.getSessionsByTherapistId(therapistId);
-        return ResponseEntity.ok(response);
-    }
 
 }

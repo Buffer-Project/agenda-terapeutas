@@ -1,14 +1,11 @@
 package org.buffer.agendaterapeutas.service.impl;
 
-import org.buffer.agendaterapeutas.exception.UserException;
-import org.buffer.agendaterapeutas.exception.errors.PatientError;
-import org.buffer.agendaterapeutas.exception.errors.UserError;
-import org.buffer.agendaterapeutas.model.bo.PatientBO;
 import org.buffer.agendaterapeutas.exception.PatientException;
+import org.buffer.agendaterapeutas.exception.errors.PatientError;
 import org.buffer.agendaterapeutas.model.entity.Patient;
+import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.buffer.agendaterapeutas.repository.IPatientRepository;
 import org.buffer.agendaterapeutas.service.IPatientService;
-import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,13 +18,14 @@ public class PatientServiceImpl implements IPatientService {
 
     public PatientServiceImpl(IPatientRepository patientRepository) {
         this.patientRepository = patientRepository;
+
     }
 
     @Override
     public PatientVO createPatient(PatientVO patientVO) {
 
-        if (patientRepository.existsByUserEmail(patientVO.getUser().getEmail())) {
-            throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
+        if (patientVO.getId() != null) {
+            throw new PatientException(PatientError.INVALID_FORMAT);
         }
         Patient patient = patientRepository.save(new Patient(patientVO));
         return new PatientVO(patient);
@@ -44,13 +42,13 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public PatientVO updatePatient(PatientVO patient, Long id) {
-        if (id == null) {
+        if (id == null || patient.getId() == null) {
             throw new PatientException(PatientError.MISSING_ID);
         }
         if (!patient.getId().equals(id)) {
             throw new PatientException(PatientError.ID_CONFLICT);
         }
-        if (patient.getId() == null || !patientRepository.existsById(patient.getId())) {
+        if (!patientRepository.existsById(patient.getId())) {
             throw new PatientException(PatientError.NOT_FOUND, id);
         }
 
@@ -59,11 +57,10 @@ public class PatientServiceImpl implements IPatientService {
     }
 
     public void deletePatientById(Long id) {
-        Optional<Patient> patient = patientRepository.findById(id);
-        if (patient.isEmpty()) {
-            throw new PatientException(PatientError.NOT_FOUND, id);
-        }
-        patientRepository.delete(patient.get());
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new PatientException(PatientError.NOT_FOUND, id));
+
+        patient.getUser().setActive(false);
+        patientRepository.save(patient);
     }
 
     public List<PatientVO> getAllActivePatients() {

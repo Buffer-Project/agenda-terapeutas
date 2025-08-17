@@ -14,9 +14,7 @@ public class UserVO {
     private String phone;
     private String gender;
     private int birthDate;
-
-    /*attribute for a soft delete*/
-    private boolean active = true;
+    private boolean active;
 
     public UserVO() {}
 
