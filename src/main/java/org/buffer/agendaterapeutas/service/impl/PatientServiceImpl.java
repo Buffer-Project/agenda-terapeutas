@@ -1,7 +1,9 @@
 package org.buffer.agendaterapeutas.service.impl;
 
 import org.buffer.agendaterapeutas.exception.PatientException;
+import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.PatientError;
+import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Patient;
 import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.buffer.agendaterapeutas.repository.IPatientRepository;
@@ -25,6 +27,9 @@ public class PatientServiceImpl implements IPatientService {
         if (patientVO.getId() != null) {
             throw new PatientException(PatientError.INVALID_FORMAT);
         }
+        if(patientRepository.existsByUserEmail(patientVO.getUser().getEmail())){
+            throw new UserException(UserError.EMAIL_ALREADY_EXISTS);
+        }
         Patient patient = patientRepository.save(new Patient(patientVO));
         return new PatientVO(patient);
     }
@@ -37,7 +42,7 @@ public class PatientServiceImpl implements IPatientService {
 
     @Override
     public PatientVO updatePatient(PatientVO patient, Long id) {
-        if (id == null || patient.getId() == null) {
+        if (id == null || patient == null || patient.getId() == null) {
             throw new PatientException(PatientError.MISSING_ID);
         }
         if (!patient.getId().equals(id)) {

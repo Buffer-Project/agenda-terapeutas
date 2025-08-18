@@ -56,6 +56,7 @@ class UserServiceTests {
     void createUserTest() {
         UserVO userVO = getMockUserVO();
         User userEntity = new User(userVO);
+        userVO.setId(null);
 
         when(userRepository.save(any(User.class))).thenReturn(userEntity);
 
