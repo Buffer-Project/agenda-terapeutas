@@ -40,7 +40,7 @@ public class PatientController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
         patientService.deletePatientById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/findAll")

@@ -5,9 +5,6 @@ import org.buffer.agendaterapeutas.model.bo.TherapistBO;
 
 import org.buffer.agendaterapeutas.model.entity.Therapist;
 
-
-import java.util.List;
-
 public class TherapistVO {
 
     private Long id;
@@ -16,15 +13,13 @@ public class TherapistVO {
 
     private String specialty;
 
-    private List<SessionVO> sessions;
-
     public TherapistVO(){}
 
-    public TherapistVO(Long id, UserVO user, String specialty, List<SessionVO> sessions) {
+    public TherapistVO(Long id, UserVO user, String specialty) {
         this.id = id;
         this.user = user;
         this.specialty = specialty;
-        this.sessions = sessions;
+
     }
 
     public TherapistVO(TherapistBO therapistBO) {
@@ -61,13 +56,5 @@ public class TherapistVO {
 
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
-    }
-
-    public List<SessionVO> getSessions() {
-        return sessions;
-    }
-
-    public void setSessions(List<SessionVO> sessions) {
-        this.sessions = sessions;
     }
 }

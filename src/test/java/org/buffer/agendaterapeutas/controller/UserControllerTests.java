@@ -9,10 +9,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,8 +68,57 @@ class UserControllerTests {
                 content().json(objectMapper.writeValueAsString(userVO)));
 
         verify(userService).getUserById(id);
+    }
+
+    @Test
+    void updateUserTest() throws Exception {
+        Long id = 23L;
+        UserVO userVO = mock(UserVO.class);
+
+        when((userService.updateUser(any(UserVO.class), any(Long.class)))).thenReturn(userVO);
+
+        mockMvc.perform(
+                put("/api/v1/user/" + id)
+                        .content(objectMapper.writeValueAsString(userVO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk(),
+                content().json(objectMapper.writeValueAsString(userVO))
+        );
+
+        verify(userService).updateUser(any(UserVO.class), any(Long.class));
+
+    }
+
+    @Test
+    void getAllUsersTest() throws Exception {
+
+        List<UserVO> users = new ArrayList<>();
+        users.add(mock(UserVO.class));
+        users.add(new UserVO());
+        users.add(new UserVO());
+        users.add(new UserVO());
 
 
+        when(userService.getAllUsers()).thenReturn(users);
+        mockMvc.perform(
+                get("/api/v1/user")
+        ).andExpectAll(
+                status().isOk(),
+                content().json(objectMapper.writeValueAsString(users))
+        );
+
+        verify(userService, times(1)).getAllUsers();
+
+    }
+
+    @Test
+    void softDeleteUserByIdTest() throws Exception {
+        Long id = 23L;
+        mockMvc.perform(delete("/api/v1/user/" + id)).andExpectAll(status().isNoContent());
+
+        verify(userService, times(1)).deleteUser(id);
     }
 
 

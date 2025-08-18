@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -22,21 +24,27 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping
-    public ResponseEntity<UserVO> updateUser(UserVO user) {
-        // TODO
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<UserVO> updateUser(@RequestBody UserVO user, @PathVariable Long id) {
+        UserVO response = userService.updateUser(user, id);
+        return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping
-    public void deleteUser(UserVO user) {
-        // TODO
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("/{userId}")  //api/v1/user/358
-    public ResponseEntity<UserVO> getUserById(@PathVariable Long userId) {
-        UserVO response = userService.getUserById(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserVO> getUserById(@PathVariable Long id) {
+        UserVO response = userService.getUserById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserVO>> getAllUsers() {
+        List<UserVO> response = userService.getAllUsers();
         return ResponseEntity.ok(response);
     }
 }

@@ -1,15 +1,15 @@
 package org.buffer.agendaterapeutas.service;
 
-
 import org.buffer.agendaterapeutas.exception.TherapistException;
+import org.buffer.agendaterapeutas.exception.UserException;
 import org.buffer.agendaterapeutas.exception.errors.TherapistError;
-import org.buffer.agendaterapeutas.model.bo.TherapistBO;
+import org.buffer.agendaterapeutas.exception.errors.UserError;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
-import org.buffer.agendaterapeutas.model.vo.SpecialtyVO;
-
+import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 import org.buffer.agendaterapeutas.model.vo.UserVO;
 import org.buffer.agendaterapeutas.repository.ITherapistRepository;
+import org.buffer.agendaterapeutas.repository.IUserRepository;
 import org.buffer.agendaterapeutas.service.impl.TherapistServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,11 +29,17 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class TherapistServiceTests {
+class TherapistServiceTests {
 
 
     @Mock
     ITherapistRepository therapistRepository;
+
+    @Mock
+    IUserRepository userRepository;
+
+    @Mock
+    IUserService userService;
 
     @InjectMocks
     TherapistServiceImpl therapistService;
@@ -42,10 +48,11 @@ public class TherapistServiceTests {
         TherapistVO therapist = new TherapistVO();
         therapist.setId(1L);
         therapist.setUser(new UserVO());
-
+        therapist.getUser().setId(1L);
+        therapist.getUser().setActive(true);
         therapist.getUser().setFirstName("John");
         therapist.getUser().setLastName("Doe");
-        therapist.setSpecialty(new SpecialtyVO(1L, "Cardiology"));
+        therapist.setSpecialty("Cardiology");
 
         return therapist;
     }
@@ -59,18 +66,69 @@ public class TherapistServiceTests {
     @Test
     void createTherapistTest() {
 
-        TherapistVO therapist = getMockTherapistVO();
-        Therapist therapistEntity = new Therapist(new TherapistBO(therapist));
-        therapistEntity.setId(1L);
+        TherapistVO therapistVO = getMockTherapistVO();
+        therapistVO.setId(null);
+        Therapist therapistEntity = new Therapist(therapistVO);
+        User user = new User();
+        user.setId(1L);
+        user.setActive(true);
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        therapistEntity.setUser(user);
+
+        when(userService.existsById(therapistVO.getUser().getId())).thenReturn(true);
         when(therapistRepository.save(any(Therapist.class))).thenReturn(therapistEntity);
 
-        TherapistVO result = therapistService.createTherapist(therapist);
+        TherapistVO result = therapistService.createTherapist(therapistVO);
 
-        assert (result.getId().equals(1L));
+        assertNotNull(result.getUser());
 
         verify(therapistRepository, times(1)).save(any(Therapist.class));
+    }
+
+    @Test
+    void createTherapistWhenProvidedTherapistHasNullUserTest(){
+        TherapistVO therapistVO = getMockTherapistVO();
+        therapistVO.setUser(null);
+
+        TherapistException result = assertThrows(TherapistException.class, () -> {
+            therapistService.createTherapist(therapistVO);
+        });
+
+        assertEquals(result.getCode(), TherapistError.EMPTY_USER.getCode());
+        assertEquals(TherapistException.class, result.getClass());
+    }
+
+    @Test
+    void createTherapistWhenProvidedTherapistHasIdTest(){
+        TherapistVO therapistVO = getMockTherapistVO();
+        therapistVO.setId(1L);
+
+        when(userService.existsById(therapistVO.getUser().getId())).thenReturn(true);
+
+        TherapistException result = assertThrows(TherapistException.class, () -> {
+            therapistService.createTherapist(therapistVO);
+        });
+
+        assertEquals(result.getCode(), TherapistError.INVALID_FORMAT.getCode());
+        assertEquals(TherapistException.class, result.getClass());
+    }
 
 
+    @Test
+    void createTherapistWhenItsUserNotExistsTest() {
+        Long id = 43L;
+        TherapistVO therapistVO = getMockTherapistVO();
+        therapistVO.getUser().setId(id);
+
+        when(userService.existsById(id)).thenReturn(false);
+
+        UserException result = assertThrows(UserException.class, () -> {
+            therapistService.createTherapist(therapistVO);
+        });
+
+        assertEquals(result.getCode(), UserError.NOT_FOUND.getCode());
+        assertEquals(UserException.class, result.getClass());
     }
 
 
@@ -106,7 +164,7 @@ public class TherapistServiceTests {
         });
 
         assert (result.getCode() == TherapistError.MISSING_ID.getCode());
-        assert(result.getClass().equals(TherapistException.class));
+        assert (result.getClass().equals(TherapistException.class));
 
 
     }
@@ -124,24 +182,22 @@ public class TherapistServiceTests {
         });
 
         assert (result.getCode() == TherapistError.MISSING_ID.getCode());
-        assert(result.getClass().equals(TherapistException.class));
+        assert (result.getClass().equals(TherapistException.class));
 
 
     }
 
     @Test
-
     void updateTherapistTestWhenProvidedIdDoesNotEqualProvidedTherapistIdTest() {
         Long id = 700L;
         TherapistVO therapistVO = getMockTherapistVO();
-        Therapist therapistEntity = new Therapist(therapistVO);
 
         TherapistException result = assertThrows(TherapistException.class, () -> {
             therapistService.updateTherapist(therapistVO, id);
         });
 
         assertEquals(result.getCode(), TherapistError.ID_CONFLICT.getCode());
-        assert(result.getClass().equals(TherapistException.class));
+        assert (result.getClass().equals(TherapistException.class));
 
     }
 
@@ -156,7 +212,7 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
-        assert(result.getClass().equals(TherapistException.class));
+        assert (result.getClass().equals(TherapistException.class));
         verify(therapistRepository).existsById(id);
     }
 
@@ -164,17 +220,26 @@ public class TherapistServiceTests {
     void deleteTherapistByIdTest() {
         Long id = 3L;
 
-        TherapistVO therapistVO = getMockTherapistVO();
-        Therapist therapist = new Therapist(therapistVO);
 
+        User user = new User();
+        user.setId(1L);
+        user.setFirstName("John");
+        user.setActive(true);
+
+
+        Therapist therapist = new Therapist();
+        therapist.setId(id);
+        therapist.setUser(user);
+        therapist.setSpecialty("Psychology");
 
         when(therapistRepository.findById(id)).thenReturn(Optional.of(therapist));
 
         therapistService.deleteTherapistById(id);
 
-        verify(therapistRepository, times(1)).findById(id);
-        verify(therapistRepository, times(1)).deleteById(id);
+        assertFalse(therapist.getUser().isActive());
 
+        verify(therapistRepository, times(1)).findById(id);
+        verify(therapistRepository, times(1)).save(therapist);
 
     }
 
@@ -189,9 +254,8 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
-        assert(result.getClass().equals(TherapistException.class));
+        assert (result.getClass().equals(TherapistException.class));
         verify(therapistRepository, times(1)).findById(id);
-
 
 
     }
@@ -202,11 +266,14 @@ public class TherapistServiceTests {
         TherapistVO therapistVO = getMockTherapistVO();
         Therapist therapist = new Therapist(therapistVO);
 
+
         when(therapistRepository.findById(id)).thenReturn(Optional.of(therapist));
 
         TherapistVO result = therapistService.getTherapistById(id);
 
-        assertEquals("John", result.getUser().getFirstName());
+        assertEquals(therapistVO.getSpecialty(), result.getSpecialty());
+        assertEquals(therapistVO.getId(), result.getId());
+
         verify(therapistRepository, times(1)).findById(id);
 
 
@@ -223,7 +290,7 @@ public class TherapistServiceTests {
         });
 
         assertEquals(result.getCode(), TherapistError.NOT_FOUND.getCode());
-        assert(result.getClass().equals(TherapistException.class));
+        assert (result.getClass().equals(TherapistException.class));
         verify(therapistRepository, times(1)).findById(id);
 
 
@@ -244,7 +311,6 @@ public class TherapistServiceTests {
         assertEquals(3, result.size());
 
         verify(therapistRepository, times(1)).findAll();
-
 
 
     }

@@ -14,13 +14,12 @@ public class UserBO {
     private String phone;
     private String gender;
     private int birthDate;
+    private boolean active;
 
-    /*attribute for a soft delete*/
-    private boolean active = true;
+    public UserBO() {
+    }
 
-    public UserBO() {}
-
-    public UserBO(Long id, String username, String password, String firstName, String lastName, String email, String phone, String gender, int birthDate) {
+    public UserBO(Long id, String username, String password, String firstName, String lastName, String email, String phone, String gender, int birthDate,boolean active) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -30,6 +29,7 @@ public class UserBO {
         this.phone = phone;
         this.gender = gender;
         this.birthDate = birthDate;
+        this.active = active;
     }
 
     public UserBO(User user) {
@@ -42,6 +42,7 @@ public class UserBO {
         this.phone = user.getPhone();
         this.gender = user.getGender();
         this.birthDate = user.getBirthDate();
+        this.active = user.isActive();
     }
 
     public UserBO(UserVO userVO) {
@@ -54,6 +55,7 @@ public class UserBO {
         this.phone = userVO.getPhone();
         this.gender = userVO.getGender();
         this.birthDate = userVO.getBirthDate();
+        this.active = userVO.isActive();
     }
 
     public Long getId() {
