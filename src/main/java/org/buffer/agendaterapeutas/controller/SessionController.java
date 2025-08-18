@@ -65,7 +65,7 @@ public class SessionController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{therapistId}")
+    @GetMapping("/therapist/{therapistId}")
     public ResponseEntity<List<SessionVO>> getSessionsByTherapist(@PathVariable Long therapistId) {
         List<SessionVO> response = sessionService.getSessionsByTherapistId(therapistId);
         return ResponseEntity.ok(response);

@@ -12,6 +12,7 @@ import org.buffer.agendaterapeutas.model.vo.PatientVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,10 +48,13 @@ public class PatientServiceImpl implements IPatientService {
         if (id == null) {
             throw new PatientException(PatientError.MISSING_ID);
         }
-        if (!patient.getId().equals(id)) {
+        if (patient == null || patient.getId() == null) {
+            throw new PatientException(PatientError.MISSING_ID);
+        }
+        if (!Objects.equals(patient.getId(), id)) {
             throw new PatientException(PatientError.ID_CONFLICT);
         }
-        if (patient.getId() == null || !patientRepository.existsById(patient.getId())) {
+        if (!patientRepository.existsById(id)) {
             throw new PatientException(PatientError.NOT_FOUND, id);
         }
 
