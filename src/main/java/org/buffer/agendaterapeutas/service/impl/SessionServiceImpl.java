@@ -33,7 +33,6 @@ public class SessionServiceImpl implements ISessionService {
         this.sessionRepository = sessionRepository;
         this.patientRepository = patientRepository;
         this.therapistRepository = therapistRepository;
-
     }
 
 
@@ -69,11 +68,11 @@ public class SessionServiceImpl implements ISessionService {
     @Override
     public SessionVO updateSession(SessionVO session, Long id) {
 
-        if (id == null || session.getIdSession() == null) {
+        if (id == null || session.getId() == null) {
             throw new SessionException(SessionError.MISSING_ID);
         }
 
-        if (!session.getIdSession().equals(id)) {
+        if (!session.getId().equals(id)) {
             throw new SessionException(SessionError.ID_CONFLICT);
         }
 
@@ -101,7 +100,7 @@ public class SessionServiceImpl implements ISessionService {
             throw new SessionException(SessionError.NOT_FOUND);
         }
         if (session.get().getStartDateTime().isAfter(LocalDateTime.now())) {
-            session.get().setStatus(SessionStatusEnum.CANCELED);
+            session.get().setStatus(SessionStatusEnum.CANCELLED);
             sessionRepository.save(session.get());
         } else {
             throw new SessionException(SessionError.CANNOT_CANCEL_PAST_SESSION);

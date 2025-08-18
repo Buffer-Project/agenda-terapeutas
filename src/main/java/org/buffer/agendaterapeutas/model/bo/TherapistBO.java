@@ -1,9 +1,6 @@
 package org.buffer.agendaterapeutas.model.bo;
 
-import org.buffer.agendaterapeutas.model.entity.Session;
-import org.buffer.agendaterapeutas.model.entity.Specialty;
 import org.buffer.agendaterapeutas.model.entity.Therapist;
-import org.buffer.agendaterapeutas.model.entity.User;
 import org.buffer.agendaterapeutas.model.vo.TherapistVO;
 
 import java.util.List;
@@ -14,14 +11,14 @@ public class TherapistBO {
 
     private UserBO user;
 
-    private SpecialtyBO specialty;
+    private String specialty;
 
     private List<SessionBO> sessions;
 
     public TherapistBO() {
     }
 
-    public TherapistBO(Long id, UserBO user, SpecialtyBO specialty, List<SessionBO> sessions) {
+    public TherapistBO(Long id, UserBO user, String specialty, List<SessionBO> sessions) {
         this.id = id;
         this.user = user;
         this.specialty = specialty;
@@ -31,14 +28,14 @@ public class TherapistBO {
     public TherapistBO(Therapist therapist) {
         this.id = therapist.getId();
         this.user = therapist.getUser() != null ? new UserBO(therapist.getUser()) : null;
-        this.specialty = therapist.getSpecialty() != null ? new SpecialtyBO(therapist.getSpecialty()) : null;
+        this.specialty = therapist.getSpecialty();
         this.sessions = therapist.getSessions() != null ? therapist.getSessions().stream().map(SessionBO::new).toList() : null;
     }
 
     public TherapistBO(TherapistVO therapistVO) {
         this.id = therapistVO.getId();
         this.user = therapistVO.getUser() != null ? new UserBO(therapistVO.getUser()) : null;
-        this.specialty = therapistVO.getSpecialty() != null ? new SpecialtyBO(therapistVO.getSpecialty()) : null;
+        this.specialty = therapistVO.getSpecialty();
         this.sessions = therapistVO.getSessions() != null ? therapistVO.getSessions().stream().map(SessionBO::new).toList() : null;
     }
 
@@ -58,11 +55,11 @@ public class TherapistBO {
         this.user = user;
     }
 
-    public SpecialtyBO getSpecialty() {
+    public String getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(SpecialtyBO specialty) {
+    public void setSpecialty(String specialty) {
         this.specialty = specialty;
     }
 

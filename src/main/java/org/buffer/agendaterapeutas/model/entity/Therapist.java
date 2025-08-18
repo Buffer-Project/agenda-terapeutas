@@ -12,13 +12,13 @@ import java.util.List;
 public class Therapist {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToOne
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private User user;
 
-    @ManyToOne(optional = false)
-    private Specialty specialty;
+    private String specialty;
 
     @OneToMany(mappedBy = "therapist", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Session> sessions;
@@ -26,7 +26,7 @@ public class Therapist {
     public Therapist() {
     }
 
-    public Therapist(Long id, User user, Specialty specialty, List<Session> sessions) {
+    public Therapist(Long id, User user, String specialty, List<Session> sessions) {
         this.id = id;
         this.user = user;
         this.specialty = specialty;
@@ -36,14 +36,14 @@ public class Therapist {
     public Therapist(TherapistBO therapistBO) {
         this.id = therapistBO.getId();
         this.user = therapistBO.getUser() != null ? new User(therapistBO.getUser()) : null;
-        this.specialty = therapistBO.getSpecialty() != null ? new Specialty(therapistBO.getSpecialty()) : null;
+        this.specialty = therapistBO.getSpecialty();
         this.sessions = therapistBO.getSessions() != null ? therapistBO.getSessions().stream().map(Session::new).toList() : null;
     }
 
     public Therapist(TherapistVO therapistVO) {
         this.id = therapistVO.getId();
         this.user = therapistVO.getUser() != null ? new User(therapistVO.getUser()) : null;
-        this.specialty = therapistVO.getSpecialty() != null ? new Specialty(therapistVO.getSpecialty()) : null;
+        this.specialty = therapistVO.getSpecialty();
         this.sessions = therapistVO.getSessions() != null ? therapistVO.getSessions().stream().map(Session::new).toList() : null;
     }
 
@@ -63,11 +63,11 @@ public class Therapist {
         this.user = user;
     }
 
-    public Specialty getSpecialty() {
+    public String getSpecialty() {
         return specialty;
     }
 
-    public void setSpecialty(Specialty specialty) {
+    public void setSpecialty(String specialty) {
         this.specialty = specialty;
     }
 

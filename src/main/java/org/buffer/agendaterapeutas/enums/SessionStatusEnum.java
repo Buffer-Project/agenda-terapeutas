@@ -2,7 +2,7 @@ package org.buffer.agendaterapeutas.enums;
 
 public enum SessionStatusEnum {
     RESERVED,
-    CANCELED,
+    CANCELLED,
     RESCHEDULED,
     COMPLETED
 }

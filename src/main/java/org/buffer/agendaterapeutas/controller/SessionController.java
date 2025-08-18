@@ -42,6 +42,7 @@ public class SessionController {
         return ResponseEntity.ok().build();
     }
 
+    //TODO: delete, use update instead
     @DeleteMapping("/cancelReservation/{id}")
     public ResponseEntity<Void> cancelSession(@PathVariable Long id) {
         sessionService.cancelSession(id);
@@ -54,6 +55,7 @@ public class SessionController {
         return ResponseEntity.ok(response);
     }
 
+    //TODO: Move to get all with optional query params
     @GetMapping("/range")
     public ResponseEntity<List<SessionVO>> getSessionsByDateRange(
             @RequestParam LocalDateTime startDate,
