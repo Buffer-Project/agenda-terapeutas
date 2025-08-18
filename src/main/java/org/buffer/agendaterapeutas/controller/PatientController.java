@@ -19,7 +19,6 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-
     @PostMapping
     public ResponseEntity<PatientVO> createPatient(@RequestBody PatientVO patientVO) {
         PatientVO response = patientService.createPatient(patientVO);

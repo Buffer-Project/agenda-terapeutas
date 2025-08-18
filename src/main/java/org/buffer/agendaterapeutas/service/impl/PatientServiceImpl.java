@@ -17,7 +17,6 @@ public class PatientServiceImpl implements IPatientService {
 
     public PatientServiceImpl(IPatientRepository patientRepository) {
         this.patientRepository = patientRepository;
-
     }
 
     @Override
