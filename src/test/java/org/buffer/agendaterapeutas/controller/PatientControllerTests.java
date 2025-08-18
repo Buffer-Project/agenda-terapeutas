@@ -99,7 +99,7 @@ public class PatientControllerTests {
         doNothing().when(patientService).deletePatientById(1L);
 
         mockMvc.perform(delete("/api/v1/patient/{id}", 1L))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         verify(patientService).deletePatientById(1L);
     }

@@ -61,19 +61,19 @@ public class SessionServiceImpl implements ISessionService {
             throw new SessionException(SessionError.INVALID_FORMAT);
         }
         Session session = new Session();
-        Long userId = sessionVO.getTherapist().getUser().getId();
-        UserVO user = userService.getUserById(userId);
-        if (user == null) {
-            throw new UserException(UserError.NOT_FOUND, userId);
-        }
 
         Long therapistId = sessionVO.getTherapist().getId();
         TherapistVO therapist = therapistService.getTherapistById(therapistId);
         if (therapist == null) {
             throw new TherapistException(TherapistError.NOT_FOUND, sessionVO.getTherapist().getId());
         }
-        session.getTherapist().setUser(new User(user));
+
         session.setTherapist(new Therapist(therapist));
+        Long userId = sessionVO.getTherapist().getUser().getId();
+        UserVO user = userService.getUserById(userId);
+        if (user == null) {
+            throw new UserException(UserError.NOT_FOUND, userId);
+        }
 
         Long patientId = sessionVO.getPatient().getId();
         PatientVO patient = patientService.getPatientById(patientId);

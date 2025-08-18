@@ -191,12 +191,11 @@ public class PatientServiceTests {
         entity.setId(id);
 
         when(patientRepository.findById(id)).thenReturn(Optional.of(entity));
-        doNothing().when(patientRepository).delete(any(Patient.class));
 
         patientService.deletePatientById(id);
 
         verify(patientRepository, times(1)).findById(id);
-        verify(patientRepository, times(1)).delete(entity);
+        verify(patientRepository, times(1)).save(entity);
     }
 
     @Test
@@ -209,7 +208,7 @@ public class PatientServiceTests {
         assertEquals(PatientError.NOT_FOUND.getCode(), ex.getCode());
         assert (ex.getClass().equals(PatientException.class));
         verify(patientRepository, times(1)).findById(id);
-        verify(patientRepository, never()).delete(any());
+        verify(patientRepository, never()).save(any());
     }
 
     @Test
